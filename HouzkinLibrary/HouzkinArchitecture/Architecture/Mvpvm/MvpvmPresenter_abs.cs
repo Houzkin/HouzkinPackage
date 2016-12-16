@@ -10,11 +10,11 @@ using System.Reflection;
 using System.Collections.Specialized;
 
 namespace Houzkin.Architecture.Mvpvm {
-
+	
 	/// <summary>
 	/// MVPVM パターンにおけるプレゼンターとして機能を提供する。
 	/// </summary>
-	public class MvPresenter : SympathizeableNode<MvPresenter>, IPresenter{
+	public class MvPresenter : ObservableTreeNode<MvPresenter>, IPresenter{
 
 		/// <summary>既定のビューモデルを使用して新しいインスタンスを初期化する。</summary>
 		/// <param name="view">ビュー</param>

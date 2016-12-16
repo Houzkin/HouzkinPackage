@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Linq.Expressions;
 
 namespace Houzkin.Architecture.Mvpvm {
+	/*
 	public class Presenter<TView, TViewModel> : Presenter
 	where TView : FrameworkElement {
 		public Presenter(TView view, TViewModel viewModel) { this.View = view; this.ViewModel = viewModel; }
@@ -41,7 +42,7 @@ namespace Houzkin.Architecture.Mvpvm {
 			base.Dispose(disposing);
 		}
 	}
-	public abstract class Presenter : Houzkin.Tree.SympathizeableNode<Presenter>, INotifyPropertyChanged, INotifyDataErrorInfo {
+	public abstract class Presenter : Tree.ObservableTreeNode<Presenter>, INotifyPropertyChanged, INotifyDataErrorInfo {
 		internal Presenter() { }
 		public abstract FrameworkElement ViewContent { get; }
 		#region		INotifyPropertyChanged の実装
@@ -196,5 +197,5 @@ namespace Houzkin.Architecture.Mvpvm {
 		}
 		#endregion
 	}
-
+	*/
 }

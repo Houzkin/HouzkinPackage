@@ -11,12 +11,13 @@ namespace Houzkin.Architecture {
 	/// <summary>外部への公開用に共通のメンバーを定義可能な、ビューによってバインドされるツリー構造として参照元のノードをラップする。</summary>
 	/// <typeparam name="TViewModel">各ノードの共通実装部分として公開する型</typeparam>
 	/// <typeparam name="TModel">各ノードが内包するモデルの型</typeparam>
-	public abstract class ReadOnlyBindableTreeNodeBase<TModel,TViewModel> : NotificationObject, IReadOnlyTreeNode<TViewModel>, IDisposable
-	where TViewModel : ReadOnlyBindableTreeNodeBase<TModel,TViewModel>
+	public abstract class ReadOnlyBindableTreeNode<TModel,TViewModel> : NotificationObject, IReadOnlyTreeNode<TViewModel>, IDisposable
+	where TViewModel : ReadOnlyBindableTreeNode<TModel,TViewModel>
 	where TModel : IReadOnlyObservableTreeNode<TModel> {
-		/// <summary>新規インスタンスを初期化する。</summary>
+		/// <summary>新規インスタンスを初期化する。
+		/// <para>このオブジェクトは親ノードから生成された場合のみ親ノードの参照を保持する。</para></summary>
 		/// <param name="model">参照するノード</param>
-		protected ReadOnlyBindableTreeNodeBase(TModel model) { _model = model; }
+		protected ReadOnlyBindableTreeNode(TModel model) { _model = model; }
 
 		TModel _model;
 		/// <summary>対象インスタンスが参照しているオブジェクトを取得する。</summary>
@@ -52,7 +53,7 @@ namespace Houzkin.Architecture {
 			get { return childNodes; }
 		}
 		/// <summary>子ノードのコレクションを取得する。</summary>
-		public ReadOnlyBindableCollection<TViewModel> ChildNodes {
+		public ReadOnlyBindableCollection<TViewModel> Children {
 			get { return childNodes; }
 		}
 		
@@ -79,7 +80,7 @@ namespace Houzkin.Architecture {
 				throw new ObjectDisposedException(this.ToString(), "既に破棄されたインスタンスが操作されました。");
 		}
 	}
-
+	/*
 	/// <summary>
 	/// 使用時に子ノードの生成関数を指定可能なラッパーインスタンス
 	/// </summary>
@@ -91,7 +92,7 @@ namespace Houzkin.Architecture {
 		Func<TModel, TViewModel> _generate;
 		/// <summary>新規インスタンスを初期化する。</summary>
 		/// <param name="model">モデル</param>
-		/// <param name="generate"></param>
+		/// <param name="generate">モデルからビューモデルを生成する関数</param>
 		public ReadOnlyBindableTreeNode(TModel model,Func<TModel,TViewModel> generate) : base(model) {
 			if (generate == null) throw new ArgumentNullException("generate");
 			_generate = generate;
@@ -101,7 +102,7 @@ namespace Houzkin.Architecture {
 		protected sealed override TViewModel GenerateChild(TModel modelChildNode) {
 			return _generate(modelChildNode);
 		}
-	}
+	}*/
 	public static class ReadOnlyBindableTreeNode {
 		public static TViewModel Create<TModel,TViewModel>(TModel root, Func<TModel,TViewModel> generate)
 		where TModel : IReadOnlyObservableTreeNode<TModel>

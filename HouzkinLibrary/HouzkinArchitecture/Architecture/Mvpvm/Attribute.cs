@@ -13,7 +13,7 @@ namespace Houzkin.Architecture.Mvpvm {
 		/// <summary>新規インスタンスを初期化する。</summary>
 		public PremodelAttribute() { }
 		/// <summary>
-		/// プレゼンターの階層構造の変更によって値が変化するかどうかを示す。
+		/// プレゼンターの階層構造の変更によって値が変化し得るかどうかを示す。
 		/// </summary>
 		public bool DependOnStructure { get; set; }
 	}

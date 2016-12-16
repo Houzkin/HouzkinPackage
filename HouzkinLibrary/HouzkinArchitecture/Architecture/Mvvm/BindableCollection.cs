@@ -194,6 +194,9 @@ namespace Houzkin.Architecture {
 		IEnumerator<TViewModel> IEnumerable<TViewModel>.GetEnumerator() {
 			return _pairs.Select(x => x.ViewModel).OfType<TViewModel>().GetEnumerator();
 		}
+		IEnumerator IEnumerable.GetEnumerator() {
+			return (this as IEnumerable<TViewModel>).GetEnumerator();
+		}
 		/// <summary>
 		/// インスタンスを破棄する。
 		/// <para>コレクションに含まれる破棄可能なインスタンスも同時に破棄する。</para>
