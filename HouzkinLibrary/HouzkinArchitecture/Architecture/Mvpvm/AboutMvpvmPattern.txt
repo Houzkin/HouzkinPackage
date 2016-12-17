@@ -5,7 +5,7 @@ about Mvpvm Pattern
 	結合:
 		member DataContext <- ViewModel as object
 	XAMLによって外観の記述を行う
-	原則コードビハインドは無しで、ロジックを含まない
+	View内部で完結するロジックはコードビハインドに記述。
 
 ●ViewModel 
 	DynamicObjectの継承によってModelのメンバーをViewに公開
@@ -17,7 +17,7 @@ about Mvpvm Pattern
 
 ●Presenter
 	結合:
-		member View <- View as TView(密)
+		member View <- View where TView
 		member Model <- Model where TModel
 		member ViewModel <- ViewModel where MvpViewModel
 	Viewのインスタンスと変更不可能な対とし、View設定時、Viewのイベントハンドラーを設定可能
@@ -25,7 +25,8 @@ about Mvpvm Pattern
 	PreModel属性によってPresenter内のメンバーをModelのメンバーより優先的にViewに公開
 	Presenterのプロパティ変更通知、エラー変更通知はViewModelにハンドルされる
 	上記属性を使用し、外観の操作を行うロジックを記述する
-	原則、ビューのみに依存。必要ならばモデルに依存。他に解決策がない場合はビューモデルに依存。
+
+	原則、Viewのみを操作。必要ならばViewModel。他に解決策がない場合はModel。
 
 ●Model
 	INotifyPropertyChangedを実装し、複数のPresenterまたはViewModelから参照されることを想定する

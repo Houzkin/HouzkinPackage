@@ -73,13 +73,13 @@ namespace Houzkin.Architecture.Mvpvm {
 		private IEnumerable<PropertyInfo> includedProperties {
 			get {
 				if (this.Presenter == null) return new PropertyInfo[0];
-				else return (this.Presenter as MvPresenter).PremodelProperties;
+				else return this.Presenter.PremodelProperties;
 			}
 		}
 		private IEnumerable<MethodInfo> includedMethods {
 			get {
 				if (this.Presenter == null) return new MethodInfo[0];
-				else return (this.Presenter as MvPresenter).PremodelMethods;
+				else return this.Presenter.PremodelMethods;
 			}
 		}
 		#endregion

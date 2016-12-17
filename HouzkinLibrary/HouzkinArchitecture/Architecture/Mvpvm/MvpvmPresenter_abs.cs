@@ -14,18 +14,18 @@ namespace Houzkin.Architecture.Mvpvm {
 	/// <summary>
 	/// MVPVM パターンにおけるプレゼンターとして機能を提供する。
 	/// </summary>
-	public class MvPresenter : ObservableTreeNode<MvPresenter>, IPresenter{
+	public class Presenter : ObservableTreeNode<Presenter>, IPresenter{
 
 		/// <summary>既定のビューモデルを使用して新しいインスタンスを初期化する。</summary>
 		/// <param name="view">ビュー</param>
 		/// <param name="model">モデル</param>
-		public MvPresenter(FrameworkElement view, object model = null)
+		public Presenter(FrameworkElement view, object model = null)
 			: this(view, null, model) { }
 		/// <summary>新しいインスタンスを初期化する。</summary>
 		/// <param name="view">ビュー</param>
 		/// <param name="viewModel">ビューモデル。null指定により、MvpViewModelが使用される。</param>
 		/// <param name="model">モデル</param>
-		public MvPresenter(FrameworkElement view, MvpvmViewModel viewModel, object model = null) : base() {
+		public Presenter(FrameworkElement view, MvpvmViewModel viewModel, object model = null) : base() {
 
 			this._view = view;
 			this.Model = model;
@@ -41,13 +41,13 @@ namespace Houzkin.Architecture.Mvpvm {
 			}
 			//this.OnCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 		}
-		internal IEnumerable<PropertyInfo> PremodelProperties {
+		IEnumerable<PropertyInfo> IPresenter.PremodelProperties {
 			get {
 				return this.GetType().GetProperties()
 							.Where(x => x.GetCustomAttributes<PremodelAttribute>(false).Any());
 			}
 		}
-		internal IEnumerable<MethodInfo> PremodelMethods {
+		IEnumerable<MethodInfo> IPresenter.PremodelMethods {
 			get {
 				return this.GetType().GetMethods()
 							.Where(x => x.GetCustomAttributes<PremodelAttribute>(false).Any());
@@ -57,7 +57,7 @@ namespace Houzkin.Architecture.Mvpvm {
 		/// <param name="predicate">通知をするプレモデルプロパティの条件。null 指定でプレモデルプロパティ全ての変更通知を発行。</param>
 		protected void OnPremodelPropertyChanged(Predicate<PropertyInfo> predicate = null) {
 			predicate = predicate ?? new Predicate<PropertyInfo>(x => true);
-			foreach (var p in PremodelProperties) {
+			foreach (var p in (this as IPresenter).PremodelProperties) {
 				if (predicate(p)) this.OnPropertyChanged(p.Name);
 			}
 		}
@@ -74,7 +74,7 @@ namespace Houzkin.Architecture.Mvpvm {
 		/// <summary>所有するビューを取得する。</summary>
 		/// <typeparam name="TView">扱うビューの型</typeparam>
 		/// <returns>指定した型として扱うことができる場合は true。</returns>
-		protected ResultWithValue<TView> MaybeViewAs<TView>() where TView : FrameworkElement {
+		public ResultWithValue<TView> MaybeViewAs<TView>() where TView : class {
 			var view = _view as TView;
 			if (view != null) return new ResultWithValue<TView>(view);
 			else return new ResultWithValue<TView>();
@@ -112,11 +112,10 @@ namespace Houzkin.Architecture.Mvpvm {
 		/// <summary>所有するビューモデルを取得する。</summary>
 		/// <typeparam name="TViewModel">ビューモデルとして扱う型</typeparam>
 		/// <returns>指定した型として扱うことができる場合は true。</returns>
-		protected ResultWithValue<TViewModel> MaybeViewModelAs<TViewModel>() where TViewModel : MvpvmViewModel {
+		public ResultWithValue<TViewModel> MaybeViewModelAs<TViewModel>() where TViewModel : class {
 			var vm = _viewModel as TViewModel;
 			if (vm != null) return new ResultWithValue<TViewModel>(vm);
 			else return new ResultWithValue<TViewModel>();
-			
 		}
 		#endregion ViewModel
 
@@ -126,6 +125,9 @@ namespace Houzkin.Architecture.Mvpvm {
 			get { return this.Model; }
 			set { this.Model = value; }
 		}
+		/// <summary>モデルを設定する。</summary>
+		/// <param name="newModel">設定するモデル</param>
+		protected void SetModel(object newModel) { this.Model = newModel; }
 		/// <summary>MVPVMパターンにおけるモデルを取得、設定する。</summary>
 		internal object Model {
 			get { return _model; }
