@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace Houzkin.Architecture.Mvpvm {
 	/// <summary>MVPVM パターンにおいて、プレゼンターとしての基本機能を定義する。</summary>
-	internal interface IPresenter : INotifyPropertyChanged, INotifyDataErrorInfo, IDisposable{//, INotifyCollectionChanged
+	public interface IPresenter : INotifyPropertyChanged, INotifyDataErrorInfo, IDisposable{//, INotifyCollectionChanged
 
 		/// <summary>ビューを取得する。</summary>
 		FrameworkElement View { get; }

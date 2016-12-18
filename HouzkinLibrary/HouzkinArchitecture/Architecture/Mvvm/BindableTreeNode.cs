@@ -11,19 +11,20 @@ namespace Houzkin.Architecture {
 	/// <summary>外部への公開用に共通のメンバーを定義可能な、ビューによってバインドされるツリー構造として参照元のノードをラップする。</summary>
 	/// <typeparam name="TViewModel">各ノードの共通実装部分として公開する型</typeparam>
 	/// <typeparam name="TModel">各ノードが内包するモデルの型</typeparam>
-	public abstract class ReadOnlyBindableTreeNode<TModel,TViewModel> : NotificationObject, IReadOnlyTreeNode<TViewModel>, IDisposable
+	public abstract class ReadOnlyBindableTreeNode<TModel,TViewModel> : MarshalViewModel<TModel> , IReadOnlyTreeNode<TViewModel>, IDisposable
 	where TViewModel : ReadOnlyBindableTreeNode<TModel,TViewModel>
 	where TModel : IReadOnlyObservableTreeNode<TModel> {
 		/// <summary>新規インスタンスを初期化する。
 		/// <para>このオブジェクトは親ノードから生成された場合のみ親ノードの参照を保持する。</para></summary>
 		/// <param name="model">参照するノード</param>
-		protected ReadOnlyBindableTreeNode(TModel model) { _model = model; }
+		protected ReadOnlyBindableTreeNode(TModel model) : base(model) { }// { _model = model; }
 
-		TModel _model;
-		/// <summary>対象インスタンスが参照しているオブジェクトを取得する。</summary>
-		protected TModel Model {
-			get { return _model; }
-		}
+		//TModel _model;
+		///// <summary>対象インスタンスが参照しているオブジェクトを取得する。</summary>
+		//protected TModel Model {
+		//	get { return _model; }
+		//}
+
 		/// <summary>現在のビューモデルが参照するソースの子ノードから現在のビューモデルの子ノードを生成する。</summary>
 		/// <param name="modelChildNode">ソースの子ノード</param>
 		/// <returns>現在のビューモデルに追加する、子ノードのビューモデル</returns>
@@ -57,27 +58,42 @@ namespace Houzkin.Architecture {
 			get { return childNodes; }
 		}
 		
-		bool _isDisposed;
-		/// <summary>既に破棄されているかどうかを示す値を取得する。</summary>
-		protected bool IsDisposed { get { return _isDisposed; } }
-		/// <summary>ビューモデルを破棄する。</summary>
-		public void Dispose() {
-			this.Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-		/// <summary>ビューモデルを破棄する。</summary>
-		protected virtual void Dispose(bool disposing) {
-			if (IsDisposed) return;
-			if (disposing) {
-				_parent = null;
-				childNodes.Dispose();
-			}
-			_isDisposed = true;
-		}
-		/// <summary>既に破棄されているインスタンスの操作を禁止する。</summary>
-		protected void ThrowExceptionIfDisposed() {
-			if (IsDisposed)
-				throw new ObjectDisposedException(this.ToString(), "既に破棄されたインスタンスが操作されました。");
+		//bool _isDisposed;
+		///// <summary>既に破棄されているかどうかを示す値を取得する。</summary>
+		//protected bool IsDisposed { get { return _isDisposed; } }
+		///// <summary>ビューモデルを破棄する。</summary>
+		//public void Dispose() {
+		//	this.Dispose(true);
+		//	GC.SuppressFinalize(this);
+		//}
+		///// <summary>ビューモデルを破棄する。</summary>
+		//protected virtual void Dispose(bool disposing) {
+		//	if (IsDisposed) return;
+		//	if (disposing) {
+		//		_parent = null;
+		//		childNodes.Dispose();
+		//	}
+		//	_isDisposed = true;
+		//}
+		///// <summary>既に破棄されているインスタンスの操作を禁止する。</summary>
+		//protected void ThrowExceptionIfDisposed() {
+		//	if (IsDisposed)
+		//		throw new ObjectDisposedException(this.ToString(), "既に破棄されたインスタンスが操作されました。");
+		//}
+	}
+	/// <summary>ビューによってバインドされる簡易的なツリー構造として参照元のノードをラップする。</summary>
+	/// <typeparam name="TModel">各ノードが内包するモデルの型</typeparam>
+	public abstract class ReadOnlyBindableTreeNode<TModel> : ReadOnlyBindableTreeNode<TModel, ReadOnlyBindableTreeNode<TModel>>
+	where TModel : IReadOnlyObservableTreeNode<TModel> {
+		/// <summary>新規インスタンスを初期化する。</summary>
+		/// <param name="model">参照するノード</param>
+		public ReadOnlyBindableTreeNode(TModel model) : base(model) { }
+	}
+	public static class ReadOnlyBindableTreeNode {
+		public static TViewModel Create<TModel,TViewModel>(TModel root, Func<TModel,TViewModel> generate)
+		where TModel : IReadOnlyObservableTreeNode<TModel>
+		where TViewModel : ReadOnlyBindableTreeNode<TModel,TViewModel> {
+			return generate(root);
 		}
 	}
 	/*
@@ -103,19 +119,4 @@ namespace Houzkin.Architecture {
 			return _generate(modelChildNode);
 		}
 	}*/
-	public static class ReadOnlyBindableTreeNode {
-		public static TViewModel Create<TModel,TViewModel>(TModel root, Func<TModel,TViewModel> generate)
-		where TModel : IReadOnlyObservableTreeNode<TModel>
-		where TViewModel : ReadOnlyBindableTreeNode<TModel,TViewModel> {
-			return generate(root);
-		}
-	}
-	///// <summary>ビューによってバインドされる簡易的なツリー構造として参照元のノードをラップする。</summary>
-	///// <typeparam name="TModel">各ノードが内包するモデルの型</typeparam>
-	//public abstract class ReadOnlyBindableTreeNode<TModel> : ReadOnlyBindableTreeNode<TModel,ReadOnlyBindableTreeNode<TModel>> 
-	//where TModel : IReadOnlyObservableTreeNode<TModel> {
-	//	/// <summary>新規インスタンスを初期化する。</summary>
-	//	/// <param name="model">参照するノード</param>
-	//	public ReadOnlyBindableTreeNode(TModel model) : base(model) { }
-	//}
 }

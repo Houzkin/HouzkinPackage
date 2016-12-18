@@ -25,7 +25,7 @@ about Mvpvm Pattern
 	PreModel属性によってPresenter内のメンバーをModelのメンバーより優先的にViewに公開
 	Presenterのプロパティ変更通知、エラー変更通知はViewModelにハンドルされる
 	上記属性を使用し、外観の操作を行うロジックを記述する
-
+	ViewにとってViewModelであり、ViewModelにとってModelであり、ModelにとってViewModelである存在
 	原則、Viewのみを操作。必要ならばViewModel。他に解決策がない場合はModel。
 
 ●Model

@@ -9,7 +9,7 @@ using System.Windows;
 using System.Reflection;
 
 namespace Houzkin.Architecture.Mvpvm {
-	
+	/*
 	/// <summary>
 	/// MVPVM パターンにおけるプレゼンターとして機能を提供する。
 	/// </summary>
@@ -368,6 +368,7 @@ namespace Houzkin.Architecture.Mvpvm {
 			base.Dispose(disposing);
 		}
 	}
+	*/
 	/*
 	public class Presenter<TView, TViewModel> : Presenter
 	where TView : FrameworkElement {
