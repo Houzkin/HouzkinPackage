@@ -42,9 +42,9 @@ namespace Houzkin {
 		/// <param name="caseFalse">結果が false だった場合の処理</param>
 		public ResultWithValue<TValue> TrueOrNot(Action<TValue> caseTrue = null, Action<TValue> caseFalse = null) {
 			if (this) {
-				if (caseTrue != null) caseTrue(this.Value);
+				caseTrue?.Invoke(this.Value);
 			} else {
-				if (caseFalse != null) caseFalse(this.Value);
+				caseFalse?.Invoke(this.Value);
 			}
 			return this;
 		}

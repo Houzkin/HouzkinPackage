@@ -114,8 +114,7 @@ namespace System.ComponentModel {
 		/// <param name="propertyName"></param>
 		public void OnErrorsChanged(string propertyName) {
 			Action action = new Action(() => {
-				if (ErrorsChanged != null)
-					ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
+				ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
 			});
 			if (Dispatcher.CurrentDispatcher != Application.Current.Dispatcher) {
 				Application.Current.Dispatcher.Invoke(action);

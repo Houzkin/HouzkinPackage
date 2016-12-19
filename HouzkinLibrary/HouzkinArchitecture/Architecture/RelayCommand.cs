@@ -46,8 +46,7 @@ namespace Houzkin.Architecture {
 		/// <param name="sender">イベントソース</param>
 		/// <param name="e">イベント引数</param>
 		protected virtual void OnCanExecuteChanged(object sender,EventArgs e) {
-			if (this.canExecuteChanged != null) 
-				this.canExecuteChanged(sender, e);
+			this.canExecuteChanged?.Invoke(sender, e);
 		}
 		void ICommand.Execute(object parameter) {
 			this.Execute();

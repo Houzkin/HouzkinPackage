@@ -55,8 +55,16 @@ namespace System.ComponentModel {
 			set { _indexPropertyName = value; }
 		}
 		/// <summary>プロパティ値が変更されたときに発生する。</summary>
-		[field:NonSerialized]
-		public event PropertyChangedEventHandler PropertyChanged;
+		[field: NonSerialized]
+		public event PropertyChangedEventHandler propertyChanged;
+		public event PropertyChangedEventHandler PropertyChanged {
+			add {
+
+			}
+			remove {
+
+			}
+		}
 
 		/// <summary>コレクションが変更されたときに発生する。</summary>
 		[field:NonSerialized]
@@ -85,12 +93,9 @@ namespace System.ComponentModel {
 		private void Raise(object sender, string name,NotifyCollectionChangedEventArgs e) {
 			if (raisingName.Add(name)) {
 				if (name == this.IndexPropertyName && e != null) {
-					if(this.CollectionChanged != null)
-						this.CollectionChanged(sender, e);
+					this.CollectionChanged?.Invoke(sender, e);
 				} else {
-					if (this.PropertyChanged != null) {
-						this.PropertyChanged(sender, new PropertyChangedEventArgs(name));
-					}
+					this.PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(name));
 				}
 				raisingName.Remove(name);
 			}

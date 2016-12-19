@@ -10,6 +10,22 @@ using System.Reflection;
 using System.Collections.Specialized;
 
 namespace Houzkin.Architecture.Mvpvm {
+
+	/// <summary>MVPVMパターンにおけるプレゼンターとして機能を提供する。</summary>
+	/// <typeparam name="TView">ビュー</typeparam>
+	public class Presenter<TView> : Presenter where TView:FrameworkElement {
+		/// <summary>新規インスタンスを初期化する。</summary>
+		/// <param name="view">ビュー</param>
+		/// <param name="model">モデル</param>
+		public Presenter(TView view, object model = null) : base(view, model) { }
+		/// <summary>新規インスタンスを初期化する。</summary>
+		/// <param name="view">ビュー</param>
+		/// <param name="viewModel">ビューモデル</param>
+		/// <param name="model">モデル</param>
+		public Presenter(TView view, MvpvmViewModel viewModel,object model = null) :base(view,viewModel,model) { }
+		/// <summary>このプレゼンターが担うビュー。</summary>
+		public new TView View { get { return base.View as TView; } }
+	}
 	
 	/// <summary>
 	/// MVPVM パターンにおけるプレゼンターとして機能を提供する。
