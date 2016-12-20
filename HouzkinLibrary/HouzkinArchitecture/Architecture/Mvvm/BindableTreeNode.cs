@@ -11,7 +11,7 @@ namespace Houzkin.Architecture {
 	/// <summary>外部への公開用に共通のメンバーを定義可能な、ビューによってバインドされるツリー構造として参照元のノードをラップする。</summary>
 	/// <typeparam name="TViewModel">各ノードの共通実装部分として公開する型</typeparam>
 	/// <typeparam name="TModel">各ノードが内包するモデルの型</typeparam>
-	public abstract class ReadOnlyBindableTreeNode<TModel,TViewModel> : MarshalViewModel<TModel> , IReadOnlyTreeNode<TViewModel>, IDisposable
+	public abstract class ReadOnlyBindableTreeNode<TModel,TViewModel> : DynamicViewModel<TModel> , IReadOnlyTreeNode<TViewModel>, IDisposable
 	where TViewModel : ReadOnlyBindableTreeNode<TModel,TViewModel>
 	where TModel : IReadOnlyObservableTreeNode<TModel> {
 		/// <summary>新規インスタンスを初期化する。

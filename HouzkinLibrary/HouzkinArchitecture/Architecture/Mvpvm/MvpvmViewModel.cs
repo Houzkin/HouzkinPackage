@@ -9,7 +9,7 @@ using System.Collections;
 namespace Houzkin.Architecture.Mvpvm {
 	
 	/// <summary>MVPVM パターンにおけるビューモデルを表す。</summary>
-	public class MvpvmViewModel : MarshalViewModel {
+	public class MvpvmViewModel : DynamicViewModel {
 
 		/// <summary>新しいインスタンスを初期化する。</summary>
 		public MvpvmViewModel(): base() { }

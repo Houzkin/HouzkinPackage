@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace Houzkin.Architecture {
 
-	public interface IWeakEvent : IDisposable {
-		/// <summary>参照先が存在しているかどうかを示す値を返す。</summary>
-		bool HasReference { get; }
-	}
-
 	/// <summary>
 	/// ウィークイベントリスナーの基底クラスを表す。
 	/// <para>拡張して使用する場合はジェネリック型を継承する。</para>
@@ -27,7 +22,7 @@ namespace Houzkin.Architecture {
 		/// <param name="add">ソースにハンドラーを追加する。</param>
 		/// <param name="remove">ソースからハンドラーを削除する。</param>
 		/// <param name="handler">処理を行うハンドラー</param>
-		public static IWeakEvent Register<TSource, TListener, THandler>(TSource sender, TListener listener, Func<EventHandler<TEventArgs>, THandler> conv,
+		public static IDisposable Register<TSource, TListener, THandler>(TSource sender, TListener listener, Func<EventHandler<TEventArgs>, THandler> conv,
 		Action<TSource, THandler> add, Action<TSource, THandler> remove, Action<TListener, object, TEventArgs> handler) where TListener : class {
 			return new WeakEventListener<TSource, TListener, THandler, TEventArgs>(sender, listener, conv, add, remove, handler);
 		}
@@ -39,7 +34,7 @@ namespace Houzkin.Architecture {
 		/// <param name="add">ソースにハンドラーを追加する。</param>
 		/// <param name="remove">ソースからハンドラーを削除する。</param>
 		/// <param name="handler">処理を行うハンドラー</param>
-		public static IWeakEvent Register<TSource, TListener>(TSource sender, TListener listener, Action<TSource, EventHandler<TEventArgs>> add,
+		public static IDisposable Register<TSource, TListener>(TSource sender, TListener listener, Action<TSource, EventHandler<TEventArgs>> add,
 		Action<TSource, EventHandler<TEventArgs>> remove, Action<TListener, object, TEventArgs> handler) where TListener : class {
 			return new WeakEventListener<TSource, TListener, EventHandler<TEventArgs>, TEventArgs>(sender, listener, x => x, add, remove, handler);
 		}
@@ -89,7 +84,7 @@ namespace Houzkin.Architecture {
 	/// <typeparam name="TListener">弱参照する対象</typeparam>
 	/// <typeparam name="THandler">イベントハンドラー</typeparam>
 	/// <typeparam name="TEventArgs">イベント引数</typeparam>
-	public class WeakEventListener<TSource, TListener, THandler, TEventArgs> : WeakEvent<TEventArgs>, IWeakEvent
+	public class WeakEventListener<TSource, TListener, THandler, TEventArgs> : WeakEvent<TEventArgs>
 		where TListener : class
 		where TEventArgs : EventArgs {
 		readonly WeakReference<TListener> listenerRef;
@@ -114,13 +109,6 @@ namespace Houzkin.Architecture {
 					throw new ArgumentNullException(t.Item2);
 				if (!t.Item1.Method.IsStatic)
 					throw new ArgumentException("指定された式は式外の変数を参照しています。", t.Item2);
-			}
-		}
-		/// <summary>参照先が存在しているかどうかを示す値を返す。</summary>
-		public bool HasReference {
-			get {
-				TListener tgt;
-				return listenerRef.TryGetTarget(out tgt);
 			}
 		}
 		/// <summary>新規インスタンスを初期化する。</summary>

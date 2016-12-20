@@ -13,32 +13,30 @@ using System.Windows;
 namespace Houzkin.Architecture {
 	/// <summary>MVVMパターンにおけるビューモデルとしての機能を提供する。</summary>
 	/// <typeparam name="TModel">モデルの型</typeparam>
-	public class MarshalViewModel<TModel> : MarshalViewModel {
+	public class DynamicViewModel<TModel> : DynamicViewModel {
 
 		///// <summary>新しいインスタンスを初期化する。</summary>
 		//public MarshalViewModel() : base() { }
 
 		/// <summary>新しいインスタンスを初期化する。</summary>
 		/// <param name="model">参照するモデル</param>
-		public MarshalViewModel(TModel model) : base(model) { }
+		public DynamicViewModel(TModel model) : base(model) { }
 
 		/// <summary>モデルを取得、設定する。</summary>
 		protected TModel Model {
 			get {
-				//if (base.InnerModel == null) { return default(TModel); }
 				return  (TModel)(base.InnerModel);
 			}
-			//set { base.Model = value; }
 		}
 	}
 	/// <summary>MVVMパターンにおけるビューモデルとしての機能を提供する。</summary>
-	public class MarshalViewModel : BindableObject, INotifyDataErrorInfo {
+	public class DynamicViewModel : BindableObject, INotifyDataErrorInfo {
 		/// <summary>新規インスタンスを初期化する。</summary>
 		/// <param name="model">モデル</param>
-		public MarshalViewModel(object model) : base(model) { }
+		public DynamicViewModel(object model) : base(model) { }
 
 		/// <summary>MvpvmViewModelを初期化するときに呼び出す。</summary>
-		internal MarshalViewModel() : base() { }
+		internal DynamicViewModel() : base() { }
 		#region		INotifyDataErrorInfo の実装
 		DataErrorNotificationManager _em;
 		private DataErrorNotificationManager ErrorManager {

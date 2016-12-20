@@ -13,7 +13,7 @@ namespace Houzkin.Architecture {
 	/// ビューによってバインドされるコレクションの提供と、その生成を補助する。
 	/// <para>拡張する場合はジェネリクス型を継承る。</para>
 	/// </summary>
-	public abstract class ReadOnlyBindableCollection : INotifyPropertyChanged, INotifyCollectionChanged, IEnumerable, IDisposable {
+	public abstract class ReadOnlyBindableCollection : INotifyPropertyChanged, INotifyCollectionChanged, IDisposable {
 		internal readonly IEnumerable _source;
 		internal ReadOnlyBindableCollection(IEnumerable model) { _source = model; }
 
@@ -61,9 +61,7 @@ namespace Houzkin.Architecture {
 			public new TModel Model { get { return (TModel)base.Model; } }
 			public new TViewModel ViewModel { get { return (TViewModel)base.ViewModel; } }
 		}
-		IEnumerator IEnumerable.GetEnumerator() {
-			return _source.GetEnumerator();
-		}
+		
 
 		#region IDisposable Support
 		bool _isDisposed;

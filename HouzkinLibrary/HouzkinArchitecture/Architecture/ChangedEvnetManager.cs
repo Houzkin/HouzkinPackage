@@ -56,15 +56,7 @@ namespace System.ComponentModel {
 		}
 		/// <summary>プロパティ値が変更されたときに発生する。</summary>
 		[field: NonSerialized]
-		public event PropertyChangedEventHandler propertyChanged;
-		public event PropertyChangedEventHandler PropertyChanged {
-			add {
-
-			}
-			remove {
-
-			}
-		}
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		/// <summary>コレクションが変更されたときに発生する。</summary>
 		[field:NonSerialized]
