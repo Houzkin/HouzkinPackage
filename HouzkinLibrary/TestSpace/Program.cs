@@ -17,35 +17,36 @@ namespace TestSpace {
 	
 	class Program {
 		static void Main(string[] args) {
-			SerializeTest.Run();
+
+			//SerializeTest.Run();
 			Console.ReadKey();
 
-			EventHandler<StructureChangedEventArgs<TestTreeNode>> ev = (o, e) => {
-				Console.WriteLine("sender:{0},target:{1},previous:{2},action:{3}", o, e.Target, e.PreviousParentOfTarget,e.TreeAction);
-				if (e.DescendantsChanged) {
-					Console.WriteLine("\tdesAction:{0}", e.DescendantInfo.NodeAction);
-				}
-				if (e.AncestorChanged) {
-					Console.WriteLine("\tRootChanged:{0}", e.AncestorInfo.RootChanged);
-				}
-			};
-			var A = new TestTreeNode("A");
-			A.StructureChanged += ev;
+			//EventHandler<StructureChangedEventArgs<TestTreeNode>> ev = (o, e) => {
+			//	Console.WriteLine("sender:{0},target:{1},previous:{2},action:{3}", o, e.Target, e.PreviousParentOfTarget,e.TreeAction);
+			//	if (e.DescendantsChanged) {
+			//		Console.WriteLine("\tdesAction:{0}", e.DescendantInfo.NodeAction);
+			//	}
+			//	if (e.AncestorChanged) {
+			//		Console.WriteLine("\tRootChanged:{0}", e.AncestorInfo.RootChanged);
+			//	}
+			//};
+			//var A = new TestTreeNode("A");
+			//A.StructureChanged += ev;
 
-			var B = new TestTreeNode("B");
-			B.StructureChanged += ev;
+			//var B = new TestTreeNode("B");
+			//B.StructureChanged += ev;
 
-			var C = new TestTreeNode("C");
-			C.StructureChanged += ev;
+			//var C = new TestTreeNode("C");
+			//C.StructureChanged += ev;
 
-			var D = new TestTreeNode("D");
-			D.StructureChanged += ev;
+			//var D = new TestTreeNode("D");
+			//D.StructureChanged += ev;
 
-			A.AddChild(B);
-			C.Parent = A;
+			//A.AddChild(B);
+			//C.Parent = A;
 
-			B.AddChild(C);
-			Console.WriteLine("- - - - - - - - - - - - - - - -");
+			//B.AddChild(C);
+			//Console.WriteLine("- - - - - - - - - - - - - - - -");
 
 			//A.ChildNodes[0] = D;
 			//A.AddChild(B).ChildNodes.First()
@@ -58,23 +59,39 @@ namespace TestSpace {
 
 			//Console.WriteLine("- - - - - - - - - - - - - - - -");
 			//A.Move();
-			B.AddChild(D);
-			var tt = D.NodePath(x => x.ToString());
-			var pth = NodePath<string>.Create(D, x => x.ToString());
-			Console.WriteLine(pth);
+			//B.AddChild(D);
+			//var tt = D.NodePath(x => x.ToString());
+			//var pth = NodePath<string>.Create(D, x => x.ToString());
+			//Console.WriteLine(pth);
+			//Console.ReadKey();
+			var to = new TestObj();
+			var listener = new Houzkin.Architecture.PropertyListener<TestObj>(to);
+			listener.RegisterHandler(t => t.Obj.Name,()=> { Console.WriteLine("prop changed "); });
+
+			to.Obj.Name = "Hoge";
 			Console.ReadKey();
 		}
 	}
-	class TestTreeNode : ObservableTreeNode<TestTreeNode> {
-		string _name;
-		public TestTreeNode(string name) {
-			_name = name;
+	class TestObj : Houzkin.Architecture.NotificationObject {
+		public TestObj() {
+			obj = new NotifyObj();
 		}
-		public override string ToString() {
-			return _name;
+		NotifyObj obj;
+		public NotifyObj Obj {
+			get { return obj; }
+			set {
+				obj = value; this.OnPropertyChanged();
+			}
 		}
-		public void Move() {
-			this.ChildNodes.Move(0, 1);
+	}
+	class NotifyObj : Houzkin.Architecture.NotificationObject {
+		string name;
+		public string Name {
+			get { return name; }
+			set {
+				name = value;
+				OnPropertyChanged();
+			}
 		}
 	}
 }
