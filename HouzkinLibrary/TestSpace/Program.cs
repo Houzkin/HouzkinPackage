@@ -17,9 +17,9 @@ namespace TestSpace {
 	
 	class Program {
 		static void Main(string[] args) {
-
+			#region
 			//SerializeTest.Run();
-			Console.ReadKey();
+			//Console.ReadKey();
 
 			//EventHandler<StructureChangedEventArgs<TestTreeNode>> ev = (o, e) => {
 			//	Console.WriteLine("sender:{0},target:{1},previous:{2},action:{3}", o, e.Target, e.PreviousParentOfTarget,e.TreeAction);
@@ -64,33 +64,47 @@ namespace TestSpace {
 			//var pth = NodePath<string>.Create(D, x => x.ToString());
 			//Console.WriteLine(pth);
 			//Console.ReadKey();
-			var to = new TestObj();
-			var listener = new Houzkin.Architecture.PropertyListener<TestObj>(to);
-			listener.RegisterHandler(t => t.Obj.Name,()=> { Console.WriteLine("prop changed "); });
+			#endregion
+			var model = new TestModel();
+			var wlistener = new Livet.EventListeners.WeakEvents.PropertyChangedWeakEventListener(model);
+			wlistener.RegisterHandler((s, e) => { Console.WriteLine("prop changed by livet"); });
+			var listener = new Houzkin.Architecture.PropertyTreeChangedWeakEventListener<TestModel>(model);
+			listener.RegisterHandler(t => t.Obj.Name,(s,e)=> { Console.WriteLine("prop changed "+e.PropertyName); });
 
-			to.Obj.Name = "Hoge";
+			GC.Collect();
+
+			model.Obj = new TestModel2();
+			model.Obj.Name = "Hoge";
+			wlistener = null;
+			listener = null;
+
+			GC.Collect();
+			Console.WriteLine("- - - - GC");
+
+			model.Obj = new TestModel2();
+			model.Obj.Name = "Fuga";
 			Console.ReadKey();
 		}
 	}
-	class TestObj : Houzkin.Architecture.NotificationObject {
-		public TestObj() {
-			obj = new NotifyObj();
+	class TestModel : Livet.NotificationObject {
+		public TestModel() {
+			obj = new TestModel2();
 		}
-		NotifyObj obj;
-		public NotifyObj Obj {
+		TestModel2 obj;
+		public TestModel2 Obj {
 			get { return obj; }
 			set {
-				obj = value; this.OnPropertyChanged();
+				obj = value; this.RaisePropertyChanged();
 			}
 		}
 	}
-	class NotifyObj : Houzkin.Architecture.NotificationObject {
-		string name;
+	class TestModel2 : Livet.NotificationObject {
+		string name = "";
 		public string Name {
 			get { return name; }
 			set {
 				name = value;
-				OnPropertyChanged();
+				RaisePropertyChanged();
 			}
 		}
 	}
