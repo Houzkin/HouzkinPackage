@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
 using Livet;
 using System.Reflection;
@@ -20,15 +16,15 @@ namespace Houzkin.Architecture {
 			_eventSrc = obj;
 		}
 		public PropertyTreeChangedWeakEventListener<TSrc> RegisterHandler<TProp>(Expression<Func<TSrc,TProp>> propExp,PropertyChangedEventHandler handler) {
-			_dsp.Add(createChildWeakEventHandler(this, CreatePropertyTree(propExp.Body), handler));
+			_dsp.AddFirst(createChildWeakEventListener(this, CreatePropertyTree(propExp.Body), handler));
 			return this;
 		}
 
-		private IDisposable createChildWeakEventHandler<TChild>(PropertyTreeChangedWeakEventListener<TChild> listener, PropertyTree tree, PropertyChangedEventHandler handler)
+		private IDisposable createChildWeakEventListener<TChild>(PropertyTreeChangedWeakEventListener<TChild> listener, _propertyTree tree, PropertyChangedEventHandler handler)
 			where TChild : INotifyPropertyChanged {
 
-			Action createCldLstnr = null;
-			Action dispCldLstnr = null;
+		Action createCldLstnr = null;
+		Action dispCldLstnr = null;
 			if (tree != null) {
 				var methodName = MethodBase.GetCurrentMethod().Name;
 				createCldLstnr += () => {
@@ -39,7 +35,7 @@ namespace Houzkin.Architecture {
 						.CreateDelegate(getterType, getterMi)
 						.DynamicInvoke(listener._eventSrc);
 
-					// プロパティに対して PropertyListener を作成。
+					// プロパティに対してリスナーを作成。
 					var childType = childValue.GetType();
 					object childListener = null;
 					if (typeof(INotifyPropertyChanged).IsAssignableFrom(childType)) {
@@ -47,8 +43,9 @@ namespace Houzkin.Architecture {
 							.MakeGenericType(childType)
 							.GetConstructor(new Type[] { childType })
 							.Invoke(new object[] { childValue });
-						dispCldLstnr +=
-							() => (childListener as IDisposable)?.Dispose();
+						dispCldLstnr += () => {
+							(childListener as IDisposable)?.Dispose();
+						};
 						listener
 							.GetType()
 							.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
@@ -60,10 +57,12 @@ namespace Houzkin.Architecture {
 			createCldLstnr?.Invoke();
 			return new LivetWeakEventListener<PropertyChangedEventHandler, PropertyChangedEventArgs>(
 				h => new PropertyChangedEventHandler(h),
-				h => { listener._eventSrc.PropertyChanged += h; },
+				h => {
+					listener._eventSrc.PropertyChanged += h;
+				},
 				h => {
 					listener._eventSrc.PropertyChanged -= h;
-					dispCldLstnr?.Invoke();
+					dispCldLstnr?.Invoke(); 
 				},
 				(s, e) => {
 					if (e.PropertyName == tree.PropertyInfo.Name) {
@@ -74,15 +73,14 @@ namespace Houzkin.Architecture {
 				});
 		}
 		
-		// 式木とは逆順のプロパティ木構造を作成する。
-		private PropertyTree CreatePropertyTree(Expression exp, PropertyTree child = null) {
+		private _propertyTree CreatePropertyTree(Expression exp, _propertyTree child = null) {
 			var mExp = exp as MemberExpression;
 			if (mExp == null) return null;
 			
 			var pi = mExp.Member as PropertyInfo;
 			if (pi == null) throw new ArgumentException("式木からプロパティを取得できません。");
 			
-			var tree = new PropertyTree(pi, child);
+			var tree = new _propertyTree(pi, child);
 			var parent = CreatePropertyTree(mExp.Expression, tree);
 			if (parent != null) return parent;
 
@@ -94,15 +92,17 @@ namespace Houzkin.Architecture {
 			GC.SuppressFinalize(this);
 		}
 		protected virtual void Dispose(bool disposing) {
-			if (disposing) _dsp.Dispose();
+			if (disposing) {
+				_dsp.Dispose();
+			}
 		}
-		private class PropertyTree {
-			public PropertyTree(PropertyInfo pi, PropertyTree child) {
+		private class _propertyTree {
+			public _propertyTree(PropertyInfo pi, _propertyTree child) {
 				PropertyInfo = pi;
 				Child = child;
 			}
 			public PropertyInfo PropertyInfo { get; private set; }
-			public PropertyTree Child { get; set; }
+			public _propertyTree Child { get; set; }
 		}
 	}
 }

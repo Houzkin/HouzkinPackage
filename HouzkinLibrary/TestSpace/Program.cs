@@ -13,97 +13,100 @@ using System.Dynamic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization.Formatters.Binary;
 
+#region
+//SerializeTest.Run();
+//Console.ReadKey();
+
+//EventHandler<StructureChangedEventArgs<TestTreeNode>> ev = (o, e) => {
+//	Console.WriteLine("sender:{0},target:{1},previous:{2},action:{3}", o, e.Target, e.PreviousParentOfTarget,e.TreeAction);
+//	if (e.DescendantsChanged) {
+//		Console.WriteLine("\tdesAction:{0}", e.DescendantInfo.NodeAction);
+//	}
+//	if (e.AncestorChanged) {
+//		Console.WriteLine("\tRootChanged:{0}", e.AncestorInfo.RootChanged);
+//	}
+//};
+//var A = new TestTreeNode("A");
+//A.StructureChanged += ev;
+
+//var B = new TestTreeNode("B");
+//B.StructureChanged += ev;
+
+//var C = new TestTreeNode("C");
+//C.StructureChanged += ev;
+
+//var D = new TestTreeNode("D");
+//D.StructureChanged += ev;
+
+//A.AddChild(B);
+//C.Parent = A;
+
+//B.AddChild(C);
+//Console.WriteLine("- - - - - - - - - - - - - - - -");
+
+//A.ChildNodes[0] = D;
+//A.AddChild(B).ChildNodes.First()
+//	.AddChild(C).ChildNodes.First()
+//	.AddChild(D);
+
+//A.ChildNodes[0] = D;
+
+//A.AddChild(B).AddChild(C);
+
+//Console.WriteLine("- - - - - - - - - - - - - - - -");
+//A.Move();
+//B.AddChild(D);
+//var tt = D.NodePath(x => x.ToString());
+//var pth = NodePath<string>.Create(D, x => x.ToString());
+//Console.WriteLine(pth);
+//Console.ReadKey();
+#endregion
+using Houzkin.Architecture;
 namespace TestSpace {
 	
+	//以下 テストコード
 	class Program {
 		static void Main(string[] args) {
-			#region
-			//SerializeTest.Run();
-			//Console.ReadKey();
-
-			//EventHandler<StructureChangedEventArgs<TestTreeNode>> ev = (o, e) => {
-			//	Console.WriteLine("sender:{0},target:{1},previous:{2},action:{3}", o, e.Target, e.PreviousParentOfTarget,e.TreeAction);
-			//	if (e.DescendantsChanged) {
-			//		Console.WriteLine("\tdesAction:{0}", e.DescendantInfo.NodeAction);
-			//	}
-			//	if (e.AncestorChanged) {
-			//		Console.WriteLine("\tRootChanged:{0}", e.AncestorInfo.RootChanged);
-			//	}
-			//};
-			//var A = new TestTreeNode("A");
-			//A.StructureChanged += ev;
-
-			//var B = new TestTreeNode("B");
-			//B.StructureChanged += ev;
-
-			//var C = new TestTreeNode("C");
-			//C.StructureChanged += ev;
-
-			//var D = new TestTreeNode("D");
-			//D.StructureChanged += ev;
-
-			//A.AddChild(B);
-			//C.Parent = A;
-
-			//B.AddChild(C);
-			//Console.WriteLine("- - - - - - - - - - - - - - - -");
-
-			//A.ChildNodes[0] = D;
-			//A.AddChild(B).ChildNodes.First()
-			//	.AddChild(C).ChildNodes.First()
-			//	.AddChild(D);
-
-			//A.ChildNodes[0] = D;
-
-			//A.AddChild(B).AddChild(C);
-
-			//Console.WriteLine("- - - - - - - - - - - - - - - -");
-			//A.Move();
-			//B.AddChild(D);
-			//var tt = D.NodePath(x => x.ToString());
-			//var pth = NodePath<string>.Create(D, x => x.ToString());
-			//Console.WriteLine(pth);
-			//Console.ReadKey();
-			#endregion
 			var model = new TestModel();
-			var wlistener = new Livet.EventListeners.WeakEvents.PropertyChangedWeakEventListener(model);
-			wlistener.RegisterHandler((s, e) => { Console.WriteLine("prop changed by livet"); });
-			var listener = new Houzkin.Architecture.PropertyTreeChangedWeakEventListener<TestModel>(model);
-			listener.RegisterHandler(t => t.Obj.Name,(s,e)=> { Console.WriteLine("prop changed "+e.PropertyName); });
+			var listener = new PropertyTreeChangedWeakEventListener<TestModel>(model);
+			listener.RegisterHandler(t => t.Hoge.Fuga,(s,e)=> { Console.WriteLine("prop changed "+e.PropertyName); });
 
-			GC.Collect();
 
-			model.Obj = new TestModel2();
-			model.Obj.Name = "Hoge";
-			wlistener = null;
+			var pickedHoge = model.Hoge;
+			model.Hoge = new TestModel2();
+			Console.WriteLine("---- start ----");
+			pickedHoge.Fuga = "xxx";
+
 			listener = null;
 
 			GC.Collect();
 			Console.WriteLine("- - - - GC");
 
-			model.Obj = new TestModel2();
-			model.Obj.Name = "Fuga";
+			pickedHoge.Fuga = "xxx";
+			model.Hoge.Fuga = "xxx";
+
 			Console.ReadKey();
 		}
 	}
 	class TestModel : Livet.NotificationObject {
 		public TestModel() {
-			obj = new TestModel2();
+			_hoge = new TestModel2();
 		}
-		TestModel2 obj;
-		public TestModel2 Obj {
-			get { return obj; }
+		TestModel2 _hoge;
+		public TestModel2 Hoge {
+			get { return _hoge; }
 			set {
-				obj = value; this.RaisePropertyChanged();
+				_hoge = value;
+				this.RaisePropertyChanged();
 			}
 		}
 	}
 	class TestModel2 : Livet.NotificationObject {
-		string name = "";
-		public string Name {
-			get { return name; }
+		string _fuga = "";
+		public string Fuga {
+			get { return _fuga; }
 			set {
-				name = value;
+				_fuga = value;
 				RaisePropertyChanged();
 			}
 		}
