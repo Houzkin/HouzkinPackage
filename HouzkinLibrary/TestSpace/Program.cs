@@ -73,8 +73,9 @@ namespace TestSpace {
 
 
 			var pickedHoge = model.Hoge;
-			model.Hoge = new TestModel2();
+			model.Hoge = new TestModel2("s - 02");
 			Console.WriteLine("---- start ----");
+			listener.Dispose();
 			pickedHoge.Fuga = "xxx";
 
 			listener = null;
@@ -89,8 +90,9 @@ namespace TestSpace {
 		}
 	}
 	class TestModel : Livet.NotificationObject {
-		public TestModel() {
+		public TestModel(string id = "01") {
 			_hoge = new TestModel2();
+			this.ID = id;
 		}
 		TestModel2 _hoge;
 		public TestModel2 Hoge {
@@ -100,8 +102,12 @@ namespace TestSpace {
 				this.RaisePropertyChanged();
 			}
 		}
+		public string ID { get; set; }
 	}
 	class TestModel2 : Livet.NotificationObject {
+		public TestModel2(string subId = "s - 01") {
+			SubID = subId;
+		}
 		string _fuga = "";
 		public string Fuga {
 			get { return _fuga; }
@@ -110,5 +116,6 @@ namespace TestSpace {
 				RaisePropertyChanged();
 			}
 		}
+		public string SubID { get; set; }
 	}
 }

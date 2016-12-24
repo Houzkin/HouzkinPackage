@@ -4,6 +4,7 @@ using Livet;
 using System.Reflection;
 using System.Linq.Expressions;
 using Livet.EventListeners.WeakEvents;
+using System.Collections.Generic;
 
 namespace Houzkin.Architecture {
 	/// <summary>階層化したプロパティに追従するWeakEventListener</summary>
@@ -11,12 +12,12 @@ namespace Houzkin.Architecture {
 	public class PropertyTreeChangedWeakEventListener<TSrc> : IDisposable 
 		where TSrc : INotifyPropertyChanged {
 		TSrc _eventSrc;
-		LivetCompositeDisposable _dsp = new LivetCompositeDisposable();
+		List<IDisposable> _dsp = new List<IDisposable>();
 		public PropertyTreeChangedWeakEventListener(TSrc obj) {
 			_eventSrc = obj;
 		}
 		public PropertyTreeChangedWeakEventListener<TSrc> RegisterHandler<TProp>(Expression<Func<TSrc,TProp>> propExp,PropertyChangedEventHandler handler) {
-			_dsp.AddFirst(createChildWeakEventListener(this, CreatePropertyTree(propExp.Body), handler));
+			_dsp.Add(createChildWeakEventListener(this, CreatePropertyTree(propExp.Body), handler));
 			return this;
 		}
 
@@ -27,7 +28,7 @@ namespace Houzkin.Architecture {
 		Action dispCldLstnr = null;
 			if (tree != null) {
 				var methodName = MethodBase.GetCurrentMethod().Name;
-				createCldLstnr += () => {
+				createCldLstnr = () => {
 					var pi = tree.PropertyInfo;
 					var getterMi = pi.GetGetMethod();
 					var getterType = typeof(Func<,>).MakeGenericType(pi.ReflectedType, pi.PropertyType);
@@ -43,7 +44,7 @@ namespace Houzkin.Architecture {
 							.MakeGenericType(childType)
 							.GetConstructor(new Type[] { childType })
 							.Invoke(new object[] { childValue });
-						dispCldLstnr += () => {
+						dispCldLstnr = () => {
 							(childListener as IDisposable)?.Dispose();
 						};
 						listener
@@ -58,14 +59,14 @@ namespace Houzkin.Architecture {
 			return new LivetWeakEventListener<PropertyChangedEventHandler, PropertyChangedEventArgs>(
 				h => new PropertyChangedEventHandler(h),
 				h => {
-					listener._eventSrc.PropertyChanged += h;
+					_eventSrc.PropertyChanged += h;
 				},
 				h => {
-					listener._eventSrc.PropertyChanged -= h;
+					_eventSrc.PropertyChanged -= h;
 					dispCldLstnr?.Invoke(); 
 				},
 				(s, e) => {
-					if (e.PropertyName == tree.PropertyInfo.Name) {
+					if(e.PropertyName == tree.PropertyInfo.Name) {
 						handler(s, e);
 						dispCldLstnr?.Invoke();
 						createCldLstnr?.Invoke();
@@ -93,7 +94,8 @@ namespace Houzkin.Architecture {
 		}
 		protected virtual void Dispose(bool disposing) {
 			if (disposing) {
-				_dsp.Dispose();
+				foreach (var d in _dsp) d.Dispose();
+				_dsp.Clear();
 			}
 		}
 		private class _propertyTree {
