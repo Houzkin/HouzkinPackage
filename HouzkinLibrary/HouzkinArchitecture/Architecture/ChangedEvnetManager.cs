@@ -17,7 +17,7 @@ namespace System.ComponentModel {
 	public sealed class NotifyChangedEventManager : INotifyPropertyChanged, INotifyCollectionChanged {
 		
 		/// <summary>新規インスタンスを初期化する。</summary>
-		public NotifyChangedEventManager() : this(Dispatcher.CurrentDispatcher) { } 
+		public NotifyChangedEventManager() : this(Livet.DispatcherHelper.UIDispatcher) { } 
 		/// <summary>新規インスタンスを初期化する。</summary>
 		/// <param name="owner">このオブジェクトを利用するインスタンス。</param>
 		public NotifyChangedEventManager(object owner)
@@ -32,6 +32,7 @@ namespace System.ComponentModel {
 		/// <summary>変更通知の制御を指定したスレッドで処理する新規インスタンスを初期化する。</summary>
 		/// <param name="dispatcher">動作するスレッドが関連付けられているディスパッチャ</param>
 		public NotifyChangedEventManager(Dispatcher dispatcher) {
+			if (dispatcher == null) throw new ArgumentNullException();
 			this._rundp = dispatcher;
 		}
 		object _owner;

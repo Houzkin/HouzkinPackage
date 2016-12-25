@@ -5,6 +5,7 @@ using System.Dynamic;
 using System;
 using System.ComponentModel;
 using System.Collections;
+using Livet.EventListeners.WeakEvents;
 
 namespace Houzkin.Architecture.Mvpvm {
 	
@@ -50,12 +51,13 @@ namespace Houzkin.Architecture.Mvpvm {
 				this.Presenter.ViewModel = this;
 				//newPresenter.PropertyChanged += ModelPropertyChangedAction;
 				//newPresenter.ErrorsChanged += OnErrorsChanged;
-				propListener = WeakEvent<PropertyChangedEventArgs>.CreateListener(
+				propListener = new LivetWeakEventListener<PropertyChangedEventHandler, PropertyChangedEventArgs>(//= WeakEvent<PropertyChangedEventArgs>.CreateListener(
 					h => new PropertyChangedEventHandler(h),
 					h => newPresenter.PropertyChanged += h,
 					h => newPresenter.PropertyChanged -= h,
 					ModelPropertyChangedAction);
-				errListener = WeakEvent<DataErrorsChangedEventArgs>.CreateListener(
+				errListener = new LivetWeakEventListener<EventHandler<DataErrorsChangedEventArgs>,DataErrorsChangedEventArgs>(//WeakEvent<DataErrorsChangedEventArgs>.CreateListener(
+					h => h,
 					h => newPresenter.ErrorsChanged += h,
 					h => newPresenter.ErrorsChanged -= h,
 					OnErrorsChanged);

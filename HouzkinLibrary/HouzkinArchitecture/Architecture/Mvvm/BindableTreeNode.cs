@@ -19,12 +19,6 @@ namespace Houzkin.Architecture {
 		/// <param name="model">参照するノード</param>
 		protected ReadOnlyBindableTreeNode(TModel model) : base(model) { }// { _model = model; }
 
-		//TModel _model;
-		///// <summary>対象インスタンスが参照しているオブジェクトを取得する。</summary>
-		//protected TModel Model {
-		//	get { return _model; }
-		//}
-
 		/// <summary>現在のビューモデルが参照するソースの子ノードから現在のビューモデルの子ノードを生成する。</summary>
 		/// <param name="modelChildNode">ソースの子ノード</param>
 		/// <returns>現在のビューモデルに追加する、子ノードのビューモデル</returns>
@@ -58,28 +52,6 @@ namespace Houzkin.Architecture {
 			get { return childNodes; }
 		}
 		
-		//bool _isDisposed;
-		///// <summary>既に破棄されているかどうかを示す値を取得する。</summary>
-		//protected bool IsDisposed { get { return _isDisposed; } }
-		///// <summary>ビューモデルを破棄する。</summary>
-		//public void Dispose() {
-		//	this.Dispose(true);
-		//	GC.SuppressFinalize(this);
-		//}
-		///// <summary>ビューモデルを破棄する。</summary>
-		//protected virtual void Dispose(bool disposing) {
-		//	if (IsDisposed) return;
-		//	if (disposing) {
-		//		_parent = null;
-		//		childNodes.Dispose();
-		//	}
-		//	_isDisposed = true;
-		//}
-		///// <summary>既に破棄されているインスタンスの操作を禁止する。</summary>
-		//protected void ThrowExceptionIfDisposed() {
-		//	if (IsDisposed)
-		//		throw new ObjectDisposedException(this.ToString(), "既に破棄されたインスタンスが操作されました。");
-		//}
 	}
 	/// <summary>ビューによってバインドされる簡易的なツリー構造として参照元のノードをラップする。</summary>
 	/// <typeparam name="TModel">各ノードが内包するモデルの型</typeparam>
@@ -96,27 +68,4 @@ namespace Houzkin.Architecture {
 			return generate(root);
 		}
 	}
-	/*
-	/// <summary>
-	/// 使用時に子ノードの生成関数を指定可能なラッパーインスタンス
-	/// </summary>
-	/// <typeparam name="TModel">各ノードが内包するモデルの型</typeparam>
-	/// <typeparam name="TViewModel">各ノードの共通実装として公開する型</typeparam>
-	public class ReadOnlyBindableTreeNode<TModel, TViewModel> : ReadOnlyBindableTreeNodeBase<TModel, TViewModel>
-	where TModel : IReadOnlyObservableTreeNode<TModel>
-	where TViewModel : ReadOnlyBindableTreeNode<TModel,TViewModel>{
-		Func<TModel, TViewModel> _generate;
-		/// <summary>新規インスタンスを初期化する。</summary>
-		/// <param name="model">モデル</param>
-		/// <param name="generate">モデルからビューモデルを生成する関数</param>
-		public ReadOnlyBindableTreeNode(TModel model,Func<TModel,TViewModel> generate) : base(model) {
-			if (generate == null) throw new ArgumentNullException("generate");
-			_generate = generate;
-		}
-		/// <summary>モデルからノードを生成する。このメンバーはオーバーライドできません。</summary>
-		/// <param name="modelChildNode">現在のモデルの子ノード</param>
-		protected sealed override TViewModel GenerateChild(TModel modelChildNode) {
-			return _generate(modelChildNode);
-		}
-	}*/
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Livet.EventListeners.WeakEvents;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -52,11 +53,11 @@ namespace Houzkin.Architecture {
 				ThrowExceptionIfDisposed();
 				var nnpc = newModel as INotifyPropertyChanged;
 				if (nnpc != null) {// nnpc.PropertyChanged += ModelPropertyChangedAction;
-					modelListener = WeakEvent<PropertyChangedEventArgs>.Register(nnpc, this,
+					modelListener = new LivetWeakEventListener<PropertyChangedEventHandler, PropertyChangedEventArgs>(
 						h => new PropertyChangedEventHandler(h),
-						(s, h) => s.PropertyChanged += h,
-						(s, h) => s.PropertyChanged -= h,
-						(l, s, e) => l.ModelPropertyChangedAction(s, e));
+						h => nnpc.PropertyChanged += h,
+						h => nnpc.PropertyChanged -= h,
+						this.ModelPropertyChangedAction);
 				}
 			}
 		}
@@ -452,7 +453,7 @@ namespace Houzkin.Architecture {
 		/// <summary>変更通知の管理オブジェクトを取得する。</summary>
 		internal NotifyChangedEventManager ChangedEventManager {
 			get {
-				if (_cpm == null) _cpm = new NotifyChangedEventManager(this, Application.Current.Dispatcher);
+				if (_cpm == null) _cpm = new NotifyChangedEventManager(this);
 				return _cpm;
 			}
 		}

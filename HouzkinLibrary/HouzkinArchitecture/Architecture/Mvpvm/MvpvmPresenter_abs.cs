@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Reflection;
 using System.Collections.Specialized;
+using Livet.EventListeners.WeakEvents;
 
 namespace Houzkin.Architecture.Mvpvm {
 
@@ -167,7 +168,8 @@ namespace Houzkin.Architecture.Mvpvm {
 			}
 			if (this.Model != null) {
 				var nm = newModel as INotifyPropertyChanged;
-				listener = WeakEvent<PropertyChangedEventArgs>.CreateListener(
+				//listener = WeakEvent<PropertyChangedEventArgs>.CreateListener(
+				listener = new LivetWeakEventListener<PropertyChangedEventHandler,PropertyChangedEventArgs>(
 					h => new PropertyChangedEventHandler(h),
 					h => nm.PropertyChanged += h,
 					h => nm.PropertyChanged -= h,

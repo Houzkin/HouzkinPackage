@@ -67,6 +67,7 @@ namespace TestSpace {
 	//以下 テストコード
 	class Program {
 		static void Main(string[] args) {
+			var bo = new BindableObject("sss");
 			var model = new TestModel();
 			var listener = new PropertyTreeChangedWeakEventListener<TestModel>(model);
 			listener.RegisterHandler(t => t.Hoge.Fuga,(s,e)=> { Console.WriteLine("prop changed "+e.PropertyName); });

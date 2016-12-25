@@ -72,7 +72,7 @@
     <Compile Include="Architecture\AsyncViewModelCommand.cs" />
     <Compile Include="Architecture\obs\AsyncRelayCommand.cs" />
     <Compile Include="Architecture\Mvvm\BindableCollection.cs" />
-    <Compile Include="Architecture\WeakEventListener.cs" />
+    <Compile Include="Architecture\obs\WeakEventListener.cs" />
     <Compile Include="Architecture\DataErrorNotificationManager.cs" />
     <Compile Include="Architecture\Mvvm\BindableObject.cs" />
     <Compile Include="Architecture\Mvvm\BindableTreeNode.cs" />

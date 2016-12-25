@@ -67,7 +67,7 @@ namespace System.ComponentModel {
 		NotifyChangedEventManager _ncem;
 		NotifyChangedEventManager ncem {
 			get {
-				if (_ncem == null) _ncem = new NotifyChangedEventManager(this,Application.Current.Dispatcher);
+				if (_ncem == null) _ncem = new NotifyChangedEventManager(this);
 				return _ncem;
 			}
 		}

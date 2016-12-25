@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Livet.EventListeners.WeakEvents;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -20,7 +21,7 @@ namespace Houzkin.Architecture {
 		NotifyChangedEventManager _cpm;
 		internal NotifyChangedEventManager ChangedEventManager {
 			get {
-				if (_cpm == null) new NotifyChangedEventManager(this, Application.Current.Dispatcher);
+				if (_cpm == null) new NotifyChangedEventManager(this);
 				return _cpm;
 			}
 		}
@@ -103,7 +104,9 @@ namespace Houzkin.Architecture {
 
 			var s = source as INotifyCollectionChanged;
 			if (s == null) throw new ArgumentException("INotifyCollectionChanged インターフェイスを実装していません。");
-			_collectionListener = WeakEvent<NotifyCollectionChangedEventArgs>.CreateListener(
+			//_collectionListener = WeakEvent<NotifyCollectionChangedEventArgs>.CreateListener(
+
+			_collectionListener = new LivetWeakEventListener<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
 				h => new NotifyCollectionChangedEventHandler(h),
 				h => s.CollectionChanged += h,
 				h => s.CollectionChanged -= h,
@@ -111,7 +114,7 @@ namespace Houzkin.Architecture {
 
 			var ps = source as INotifyPropertyChanged;
 			if(ps != null) {
-				_propListener = WeakEvent<PropertyChangedEventArgs>.CreateListener(
+				_propListener = new LivetWeakEventListener<PropertyChangedEventHandler,PropertyChangedEventArgs>(//WeakEvent<PropertyChangedEventArgs>.CreateListener(
 					h => new PropertyChangedEventHandler(h),
 					h => ps.PropertyChanged += h,
 					h => ps.PropertyChanged -= h,
