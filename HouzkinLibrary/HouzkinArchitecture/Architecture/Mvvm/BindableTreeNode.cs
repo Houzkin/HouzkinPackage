@@ -61,11 +61,11 @@ namespace Houzkin.Architecture {
 		/// <param name="model">参照するノード</param>
 		public ReadOnlyBindableTreeNode(TModel model) : base(model) { }
 	}
-	public static class ReadOnlyBindableTreeNode {
-		public static TViewModel Create<TModel,TViewModel>(TModel root, Func<TModel,TViewModel> generate)
-		where TModel : IReadOnlyObservableTreeNode<TModel>
-		where TViewModel : ReadOnlyBindableTreeNode<TModel,TViewModel> {
-			return generate(root);
-		}
-	}
+	//public static class ReadOnlyBindableTreeNode {
+	//	public static TViewModel Create<TModel,TViewModel>(TModel root, Func<TModel,TViewModel> generate)
+	//	where TModel : IReadOnlyObservableTreeNode<TModel>
+	//	where TViewModel : ReadOnlyBindableTreeNode<TModel,TViewModel> {
+	//		return generate(root);
+	//	}
+	//}
 }

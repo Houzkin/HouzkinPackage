@@ -13,9 +13,15 @@ namespace Houzkin.Architecture {
 		where TSrc : INotifyPropertyChanged {
 		TSrc _eventSrc;
 		List<IDisposable> _dsp = new List<IDisposable>();
+		/// <summary>観測対象を指定して初期化する。</summary>
+		/// <param name="obj">観測対象</param>
 		public PropertyTreeChangedWeakEventListener(TSrc obj) {
 			_eventSrc = obj;
 		}
+		/// <summary>ハンドラーを追加</summary>
+		/// <typeparam name="TProp">型</typeparam>
+		/// <param name="propExp">プロパティを示す式</param>
+		/// <param name="handler">ハンドラー</param>
 		public PropertyTreeChangedWeakEventListener<TSrc> RegisterHandler<TProp>(Expression<Func<TSrc,TProp>> propExp,PropertyChangedEventHandler handler) {
 			_dsp.Add(createChildWeakEventListener(this, CreatePropertyTree(propExp.Body), handler));
 			return this;
@@ -87,11 +93,12 @@ namespace Houzkin.Architecture {
 
 			return tree;
 		}
-		
+		/// <summary>インスタンスを破棄する。</summary>
 		public void Dispose() {
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
+		/// <summary>インスタンスを破棄する。</summary>
 		protected virtual void Dispose(bool disposing) {
 			if (disposing) {
 				foreach (var d in _dsp) d.Dispose();

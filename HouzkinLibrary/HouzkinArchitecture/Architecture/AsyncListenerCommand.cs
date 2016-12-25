@@ -10,6 +10,11 @@ using System.Threading;
 using System.Windows.Threading;
 
 namespace Houzkin.Architecture {
+
+	/// <summary>
+	/// 引数を取り、バックグラウンドで処理されるコマンドを表す。
+	/// <para>このコマンドは多重実行を阻止する。</para>
+	/// </summary>
 	public class AsyncListenerCommand<T>  : Command, ICommand, INotifyPropertyChanged {
 
 		BackgroundWorker _worker = new BackgroundWorker();
@@ -17,6 +22,11 @@ namespace Houzkin.Architecture {
 		Func<bool> _canExecute;
 		Action<Exception> _error;
 
+		/// <summary>新規インスタンスを初期化する。</summary>
+		/// <param name="action">非同期で実行されるコマンド処理</param>
+		/// <param name="canExecute">コマンド処理が実行可能かどうかを示す値を返す関数。<para>この処理はUIスレッドで実行される。</para></param>
+		/// <param name="completed">コマンド処理が正常に終了したときに実行される処理。<para>この処理はUIスレッドで実行される。</para></param>
+		/// <param name="error">コマンド処理で例外が投げられたときに実行される処理。<para>この処理はUIスレッドで実行される。</para></param>
 		public AsyncListenerCommand(Action<T> action, Func<bool> canExecute = null, Action<object> completed = null,
 		Action<Exception> error = null ){
 			_canExecute = canExecute ?? new Func<bool>(() => { return true; });
@@ -78,6 +88,9 @@ namespace Houzkin.Architecture {
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsExecuting)));
 		}
 
+		/// <summary>
+		/// コマンドの実行が可能かどうか示す値が変化したかもしれない。
+		/// </summary>
 		public void RaiseCanExecuteChanged() {
 			OnPropertyChanged();
 			OnCanExecuteChanged();

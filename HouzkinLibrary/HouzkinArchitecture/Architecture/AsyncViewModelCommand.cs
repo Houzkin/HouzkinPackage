@@ -82,7 +82,9 @@ namespace Houzkin.Architecture {
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanExecute)));
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsExecuting)));
 		}
-
+		/// <summary>
+		/// コマンドの実行が可能かどうか示す値が変化したかもしれない。
+		/// </summary>
 		public void RaiseCanExecuteChanged() {
 			OnPropertyChanged();
 			OnCanExecuteChanged();
