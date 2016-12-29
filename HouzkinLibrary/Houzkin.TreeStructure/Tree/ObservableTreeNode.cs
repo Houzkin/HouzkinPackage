@@ -29,6 +29,11 @@ namespace Houzkin.Tree {
 				return _observableChildren;
 			}
 		}
+		
+		/// <summary>子ノードを取得する。</summary>
+		public new ObservableCollection<TNode> Children {
+			get { return this.ChildNodes; }
+		}
 		#endregion
 
 		#region override
