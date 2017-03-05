@@ -21,7 +21,7 @@ namespace Houzkin.Architecture {
 		NotifyChangedEventManager _cpm;
 		internal NotifyChangedEventManager ChangedEventManager {
 			get {
-				if (_cpm == null) new NotifyChangedEventManager(this);
+				if (_cpm == null) _cpm = new NotifyChangedEventManager(this);
 				return _cpm;
 			}
 		}
