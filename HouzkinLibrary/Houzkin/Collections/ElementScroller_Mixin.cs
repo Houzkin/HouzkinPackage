@@ -160,7 +160,8 @@ namespace Houzkin.Collections {
 		/// <typeparam name="T">要素の型</typeparam>
 		/// <param name="scroller">対象インスタンス</param>
 		public static IElementScroller<T> First<T>(this IElementScroller<T> scroller) {
-			return scroller.Move(1 - scroller.CurrentIndex);
+			//return scroller.Move(1 - scroller.CurrentIndex);
+			return scroller.MoveTo(0);
 		}
 		/// <summary>シーケンス内の条件を満たす最初の位置へ移動する。</summary>
 		/// <typeparam name="T">要素の型</typeparam>
@@ -185,7 +186,8 @@ namespace Houzkin.Collections {
 		/// <typeparam name="T">要素の型</typeparam>
 		/// <param name="scroller">対象インスタンス</param>
 		public static IElementScroller<T> Last<T>(this IElementScroller<T> scroller) {
-			return scroller.Move(scroller.GetSequence().Count() - scroller.CurrentIndex);
+			//return scroller.Move(scroller.GetSequence().Count() - scroller.CurrentIndex - 1);
+			return scroller.MoveTo(scroller.GetSequence().Count() - 1);
 		}
 		/// <summary>シーケンス内の条件を満たす最後の位置へ移動する。</summary>
 		/// <typeparam name="T">要素の型</typeparam>

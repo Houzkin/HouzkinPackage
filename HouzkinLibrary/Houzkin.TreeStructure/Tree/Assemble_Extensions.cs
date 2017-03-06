@@ -21,7 +21,7 @@ namespace Houzkin.Tree {
 					.MaybeNext(x => x.Item1.Children.Contains(tr.Item1))
 					.TrueOrNot(r => addAction(r.Current.Item2, tr.Item2));
 			}
-			return vst.Last().Current.Item2;
+			return vst.Current.Item2;
 		}
 		/// <summary>対象ノードを始点とするツリーと同じ構造で、各ノードの型を変換した構造を再構築する。</summary>
 		/// <typeparam name="T">変換前の型</typeparam>
@@ -54,7 +54,7 @@ namespace Houzkin.Tree {
 					.MaybeNext(x => tr.Item1.CurrentDepth > x.Item1.CurrentDepth)
 					.TrueOrNot(r => addAction(r.Current.Item2, tr.Item2));
 			}
-			return vst.Last().Current.Item2;
+			return vst.Current.Item2;
 		}
 		private static U assemble<U, T>(IDictionary<NodeIndex, T> dictionary, Func<T, U> conv, Action<U, U> addAction) {
 			var seq = dictionary.Select(x => Tuple.Create(x.Key, conv(x.Value)));
