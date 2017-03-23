@@ -8,7 +8,7 @@ namespace Houzkin.Collections {
 	/// <summary>
 	/// 要素の巡回操作の拡張メソッドを提供する。
 	/// </summary>
-	public static class ElementVisitor {
+	public static class ElementScroller {
 		/// <summary>現在の位置にある要素に対して処理を行う。</summary>
 		/// <typeparam name="T">要素の型</typeparam>
 		/// <param name="scroller">対象インスタンス</param>
