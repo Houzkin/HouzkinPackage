@@ -78,14 +78,11 @@
     <Compile Include="Architecture\Mvvm\BindableTreeNode.cs" />
     <Compile Include="Architecture\obs\NotificationObject.cs" />
     <Compile Include="Architecture\Mvpvm\Attribute.cs" />
-    <Compile Include="Architecture\Mvpvm\MvpvmViewModelCollector.cs" />
     <Compile Include="Architecture\Mvvm\DynamicViewModel.cs" />
     <Compile Include="Architecture\ChangedEvnetManager.cs" />
-    <Compile Include="Architecture\Mvvm\BindableCollection_obs.cs" />
     <Compile Include="Architecture\obs\RelayUICommand.cs" />
-    <Compile Include="Architecture\Mvpvm\MvpvmPresenter_abs.cs" />
-    <Compile Include="Architecture\obs\RelayCommand.cs" />
     <Compile Include="Architecture\Mvpvm\MvpvmPresenter.cs" />
+    <Compile Include="Architecture\obs\RelayCommand.cs" />
     <Compile Include="Architecture\Mvpvm\MvpvmViewModel.cs" />
     <Compile Include="Architecture\Attribute.cs" />
     <Compile Include="Architecture\Mvpvm\MvpvmInterfaces.cs" />

@@ -35,7 +35,7 @@ namespace Houzkin.Tree {
 		public static T RemoveChild<T>(this ITreeNode<T> self, Predicate<T> predicate) where T :  ITreeNode<T> {
 			if (predicate == null) throw new ArgumentNullException("predicate");
 			foreach (var cld in self.Children.ToArray()) {
-				if (predicate(cld)) self.Parent.RemoveChild(cld);
+				if (predicate(cld)) self.RemoveChild(cld);
 			}
 			return (T)self;
 		}
@@ -55,27 +55,27 @@ namespace Houzkin.Tree {
 		/// <param name="self">対象ノード</param>
 		/// <param name="sibling">追加する兄弟ノード</param>
 		/// <returns>正常に追加できたかどうか示す値と現在のノードを返す。</returns>
-		public static ResultWithValue<T> MaybeInsertNextSibling<T>(this T self,T sibling)
+		public static ResultWithValue<T> MaybeInsertNextSibling<T>(this ITreeNode<T> self,ITreeNode<T> sibling)
 		where T : ITreeNode<T> {
 			if (self.Parent != null) {
 				var cash = self.Children.Count;
-				var ncash = self.Parent.InsertChild(self.BranchIndex() + 1, sibling).Children.ToArray();
-				if (cash + 1 == ncash.Length && ncash.Contains(sibling)) return new ResultWithValue<T>(self);
+				var ncash = self.Parent.InsertChild(self.BranchIndex() + 1, (T)sibling).Children.ToArray();
+				if (cash + 1 == ncash.Length && ncash.Contains((T)sibling)) return new ResultWithValue<T>((T)self);
 			}
-			return new ResultWithValue<T>(false, self);
+			return new ResultWithValue<T>(false, (T)self);
 		}
 		/// <summary>現在のノードの前に兄弟ノードを追加する。</summary>
 		/// <param name="self">対象ノード</param>
 		/// <param name="sibling">追加する兄弟ノード</param>
 		/// <returns>正常に追加できたかどうか示す値と現在のノードを返す。</returns>
-		public static ResultWithValue<T> MaybeInsertPreviousSibling<T>(this T self,T sibling)
+		public static ResultWithValue<T> MaybeInsertPreviousSibling<T>(this ITreeNode<T> self,ITreeNode<T> sibling)
 		where T : ITreeNode<T> {
 			if (self.Parent != null) {
 				var cash = self.Children.Count;
-				var ncash = self.Parent.InsertChild(self.BranchIndex(), sibling).Children.ToArray();
-				if (cash + 1 == ncash.Length && ncash.Contains(sibling)) return new ResultWithValue<T>(self);
+				var ncash = self.Parent.InsertChild(self.BranchIndex(), (T)sibling).Children.ToArray();
+				if (cash + 1 == ncash.Length && ncash.Contains((T)sibling)) return new ResultWithValue<T>((T)self);
 			}
-			return new ResultWithValue<T>(false,self);
+			return new ResultWithValue<T>(false,(T)self);
 		}
 		/// <summary>現在のノードを削除する。</summary>
 		/// <returns>正常に削除できた場合は親だったノードを、できなかった場合は現在のノードを付与した結果を返す。</returns>

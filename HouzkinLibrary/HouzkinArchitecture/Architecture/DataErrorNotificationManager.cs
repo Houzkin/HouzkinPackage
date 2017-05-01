@@ -82,7 +82,7 @@ namespace System.ComponentModel {
 		/// <summary>指定したプロパティの検証エラーを取得する。</summary>
 		/// <param name="propertyName">プロパティ名</param>
 		/// <returns>検証エラー</returns>
-		public System.Collections.IEnumerable GetErrors(string propertyName) {
+		public Collections.IEnumerable GetErrors(string propertyName) {
 			if (string.IsNullOrEmpty(propertyName) || !_errors.ContainsKey(propertyName))
 				return null;
 			return _errors[propertyName];
@@ -99,28 +99,19 @@ namespace System.ComponentModel {
 				_errors[propertyName].Add(errorMessage);
 				OnErrorsChanged(propertyName);
 			}
-			ncem.OnPropertyChanged("HasError");
-			//OnPropertyChanged(() => this.HasErrors);
+			ncem.OnPropertyChanged(nameof(HasErrors));
 		}
 		void ClearError(string propertyName) {
 			if (_errors.ContainsKey(propertyName))
 				_errors.Remove(propertyName);
 
 			OnErrorsChanged(propertyName);
-			ncem.OnPropertyChanged("HasError");
-			//OnPropertyChanged(() => this.HasErrors);
+			ncem.OnPropertyChanged(nameof(HasErrors));
 		}
 		/// <summary>エラーの変更通知を発行する。</summary>
 		/// <param name="propertyName"></param>
 		public void OnErrorsChanged(string propertyName) {
-			Action action = new Action(() => {
-				ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-			});
-			if (Dispatcher.CurrentDispatcher != Application.Current.Dispatcher) {
-				Application.Current.Dispatcher.Invoke(action);
-			} else {
-				action();
-			}
+			ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
 		}
 
 	}

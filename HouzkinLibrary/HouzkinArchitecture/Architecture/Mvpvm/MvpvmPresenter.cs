@@ -7,24 +7,42 @@ using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Reflection;
+using System.Collections.Specialized;
+using Livet.EventListeners.WeakEvents;
 
 namespace Houzkin.Architecture.Mvpvm {
-	/*
+
+	/// <summary>MVPVMパターンにおけるプレゼンターとして機能を提供する。</summary>
+	/// <typeparam name="TView">ビュー</typeparam>
+	public class Presenter<TView> : Presenter where TView:FrameworkElement {
+		/// <summary>新規インスタンスを初期化する。</summary>
+		/// <param name="view">ビュー</param>
+		/// <param name="model">モデル</param>
+		public Presenter(TView view, object model = null) : base(view, model) { }
+		/// <summary>新規インスタンスを初期化する。</summary>
+		/// <param name="view">ビュー</param>
+		/// <param name="viewModel">ビューモデル</param>
+		/// <param name="model">モデル</param>
+		public Presenter(TView view, MvpvmViewModel viewModel,object model = null) :base(view,viewModel,model) { }
+		/// <summary>このプレゼンターが担うビュー。</summary>
+		public new TView View { get { return base.View as TView; } }
+	}
+	
 	/// <summary>
 	/// MVPVM パターンにおけるプレゼンターとして機能を提供する。
 	/// </summary>
-	public class testPresenter : ObservableTreeNode<testPresenter>, IPresenter{
+	public class Presenter : ObservableTreeNode<Presenter>, IPresenter{
 
 		/// <summary>既定のビューモデルを使用して新しいインスタンスを初期化する。</summary>
 		/// <param name="view">ビュー</param>
 		/// <param name="model">モデル</param>
-		public testPresenter(FrameworkElement view, object model = null)
+		public Presenter(FrameworkElement view, object model = null)
 			: this(view, null, model) { }
 		/// <summary>新しいインスタンスを初期化する。</summary>
 		/// <param name="view">ビュー</param>
 		/// <param name="viewModel">ビューモデル。null指定により、MvpViewModelが使用される。</param>
 		/// <param name="model">モデル</param>
-		public testPresenter(FrameworkElement view, MvpvmViewModel viewModel, object model = null) : base() {
+		public Presenter(FrameworkElement view, MvpvmViewModel viewModel, object model = null) : base() {
 
 			this._view = view;
 			this.Model = model;
@@ -40,13 +58,13 @@ namespace Houzkin.Architecture.Mvpvm {
 			}
 			//this.OnCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 		}
-		internal IEnumerable<PropertyInfo> PremodelProperties {
+		IEnumerable<PropertyInfo> IPresenter.PremodelProperties {
 			get {
 				return this.GetType().GetProperties()
 							.Where(x => x.GetCustomAttributes<PremodelAttribute>(false).Any());
 			}
 		}
-		internal IEnumerable<MethodInfo> PremodelMethods {
+		IEnumerable<MethodInfo> IPresenter.PremodelMethods {
 			get {
 				return this.GetType().GetMethods()
 							.Where(x => x.GetCustomAttributes<PremodelAttribute>(false).Any());
@@ -56,7 +74,7 @@ namespace Houzkin.Architecture.Mvpvm {
 		/// <param name="predicate">通知をするプレモデルプロパティの条件。null 指定でプレモデルプロパティ全ての変更通知を発行。</param>
 		protected void OnPremodelPropertyChanged(Predicate<PropertyInfo> predicate = null) {
 			predicate = predicate ?? new Predicate<PropertyInfo>(x => true);
-			foreach (var p in PremodelProperties) {
+			foreach (var p in (this as IPresenter).PremodelProperties) {
 				if (predicate(p)) this.OnPropertyChanged(p.Name);
 			}
 		}
@@ -73,7 +91,7 @@ namespace Houzkin.Architecture.Mvpvm {
 		/// <summary>所有するビューを取得する。</summary>
 		/// <typeparam name="TView">扱うビューの型</typeparam>
 		/// <returns>指定した型として扱うことができる場合は true。</returns>
-		protected ResultWithValue<TView> MaybeViewAs<TView>() where TView : FrameworkElement {
+		public ResultWithValue<TView> MaybeViewAs<TView>() where TView : class {
 			var view = _view as TView;
 			if (view != null) return new ResultWithValue<TView>(view);
 			else return new ResultWithValue<TView>();
@@ -111,11 +129,10 @@ namespace Houzkin.Architecture.Mvpvm {
 		/// <summary>所有するビューモデルを取得する。</summary>
 		/// <typeparam name="TViewModel">ビューモデルとして扱う型</typeparam>
 		/// <returns>指定した型として扱うことができる場合は true。</returns>
-		protected ResultWithValue<TViewModel> MaybeViewModelAs<TViewModel>() where TViewModel : MvpvmViewModel {
+		public ResultWithValue<TViewModel> MaybeViewModelAs<TViewModel>() where TViewModel : class {
 			var vm = _viewModel as TViewModel;
 			if (vm != null) return new ResultWithValue<TViewModel>(vm);
 			else return new ResultWithValue<TViewModel>();
-			
 		}
 		#endregion ViewModel
 
@@ -125,6 +142,9 @@ namespace Houzkin.Architecture.Mvpvm {
 			get { return this.Model; }
 			set { this.Model = value; }
 		}
+		/// <summary>モデルを設定する。</summary>
+		/// <param name="newModel">設定するモデル</param>
+		protected void SetModel(object newModel) { this.Model = newModel; }
 		/// <summary>MVPVMパターンにおけるモデルを取得、設定する。</summary>
 		internal object Model {
 			get { return _model; }
@@ -148,7 +168,8 @@ namespace Houzkin.Architecture.Mvpvm {
 			}
 			if (this.Model != null) {
 				var nm = newModel as INotifyPropertyChanged;
-				listener = WeakEvent<PropertyChangedEventArgs>.CreateListener(
+				//listener = WeakEvent<PropertyChangedEventArgs>.CreateListener(
+				listener = new LivetWeakEventListener<PropertyChangedEventHandler,PropertyChangedEventArgs>(
 					h => new PropertyChangedEventHandler(h),
 					h => nm.PropertyChanged += h,
 					h => nm.PropertyChanged -= h,
@@ -207,11 +228,11 @@ namespace Houzkin.Architecture.Mvpvm {
 		#endregion Model
 
 		#region		INotifyPropertyChanged の実装
-		NotifyChangedEventManager _cmp = new NotifyChangedEventManager(Application.Current.Dispatcher);
+		NotifyChangedEventManager _cmp;
 		/// <summary>変更通知の管理オブジェクトを取得する。</summary>
 		internal NotifyChangedEventManager ChangedEventManager { 
 			get {
-				if (_cmp == null) _cmp = new NotifyChangedEventManager(this, Application.Current.Dispatcher);
+				if (_cmp == null) _cmp = new NotifyChangedEventManager(this);
 				return _cmp;
 			} 
 		}
@@ -265,7 +286,6 @@ namespace Houzkin.Architecture.Mvpvm {
 			get {
 				if (_em == null) {
 					_em = new DataErrorNotificationManager(this);
-					//_em.ErrorsChanged += (s, e) => OnErrorsChanged(this, e);
 					_em.PropertyChanged += (s, e) => OnPropertyChanged(() => this.HasErrors);
 				}
 				return _em;
@@ -368,197 +388,4 @@ namespace Houzkin.Architecture.Mvpvm {
 			base.Dispose(disposing);
 		}
 	}
-	*/
-	/*
-	public class Presenter<TView, TViewModel> : Presenter
-	where TView : FrameworkElement {
-		public Presenter(TView view, TViewModel viewModel) { this.View = view; this.ViewModel = viewModel; }
-		//public TView View { get; private set; }
-		public override FrameworkElement ViewContent {
-			get { return this.View; }
-		}
-		protected TView View { get; private set; }
-		TViewModel _viewModel;
-		protected TViewModel ViewModel {
-			get { return _viewModel; }
-			set { changeViewModel(_viewModel, value); }
-		}
-		void changeViewModel(TViewModel oldVM, TViewModel newVM) {
-			if (object.Equals(oldVM, newVM)) return;
-			if (newVM == null) throw new ArgumentNullException("newVM","newViewModel is null.");
-			_viewModel = newVM;
-			if (oldVM != null) { }
-			if (this.ViewModel != null) this.View.DataContext = this.ViewModel;
-		}
-		//protected void IfChanged<TProp>(Expression<Func<TViewModel, TProp>> expression, Action changed) {
-
-		//}
-		/// <summary>プレゼンターを破棄する。</summary>
-		protected override void Dispose(bool disposing) {
-			if (this.IsDisposed) return;
-			if (disposing) {
-				this.ViewModel = default(TViewModel);
-				this.View.DataContext = null;
-				this.View = null;
-				//this.Model = null;
-			}
-			base.Dispose(disposing);
-		}
-	}
-	public abstract class Presenter : Tree.ObservableTreeNode<Presenter>, INotifyPropertyChanged, INotifyDataErrorInfo {
-		internal Presenter() { }
-		public abstract FrameworkElement ViewContent { get; }
-		#region		INotifyPropertyChanged の実装
-		NotifyChangedEventManager _cmp = new NotifyChangedEventManager(Application.Current.Dispatcher);
-		/// <summary>変更通知の管理オブジェクトを取得する。</summary>
-		internal NotifyChangedEventManager ChangedEventManager {
-			get {
-				if (_cmp == null) _cmp = new NotifyChangedEventManager(this, Application.Current.Dispatcher);
-				return _cmp;
-			}
-		}
-		/// <summary>プロパティ値が変更されたときに発生する。</summary>
-		public event PropertyChangedEventHandler PropertyChanged {
-			add { ChangedEventManager.PropertyChanged += value; }
-			remove { ChangedEventManager.PropertyChanged -= value; }
-		}
-		/// <summary>プロパティ変更通知を発行する。</summary>
-		protected void OnPropertyChanged([CallerMemberName] string name = null) { ChangedEventManager.OnPropertyChanged(name); }
-		/// <summary>プロパティ変更通知の発行と、ブロックの解除キーを取得する。</summary>
-		/// <param name="name">プロパティ名</param>
-		/// <param name="delay">ブロックした直後に通知を発行する場合は false。解除直前に発行する場合は true を指定する。</param>
-		protected IDisposable OnPropertyChanged(string name, bool delay) {
-			return ChangedEventManager.OnPropertyChanged(name, delay);
-		}
-		private IDisposable OnPropertyChanged(object sender, string name, bool delay) {
-			return ChangedEventManager.OnPropertyChanged(sender, name, delay);
-		}
-		/// <summary>現在ブロックされているかどうかを示す値を取得する。</summary>
-		protected bool IsBlocking(string name) {
-			return ChangedEventManager.IsBlocking(name);
-		}
-		/// <summary>プロパティ変更通知を発行する。</summary>
-		/// <typeparam name="TProp">プロパティの型</typeparam>
-		/// <param name="property">変更したプロパティを表す式</param>
-		protected void OnPropertyChanged<TProp>(Expression<Func<TProp>> property) {
-			MemberExpression memExp;
-			memExp = property.Body as MemberExpression;
-			if (memExp == null) throw new ArgumentException("プロパティ名を特定できません");
-
-			string memName = memExp.Member.Name;
-			this.OnPropertyChanged(memName);
-		}
-		/// <summary>値の設定と変更通知を行う。<para>この処理過程において、プロパティ変更通知の重複は無効とする。</para></summary>
-		bool setProperty<TProp>(ref TProp storage, TProp value, string propertyName = null) {
-			if (object.Equals(storage, value)) {
-				return false;
-			}
-			using (OnPropertyChanged(propertyName, true)) {
-				storage = value;
-			}
-			return true;
-		}
-		#endregion
-
-		#region		INotifyDataErrorInfo
-		DataErrorNotificationManager _em;
-		private DataErrorNotificationManager ErrorManager {
-			get {
-				if (_em == null) {
-					_em = new DataErrorNotificationManager(this);
-					//_em.ErrorsChanged += (s, e) => OnErrorsChanged(this, e);
-					_em.PropertyChanged += (s, e) => OnPropertyChanged(() => this.HasErrors);
-				}
-				return _em;
-			}
-		}
-		/// <summary>アノテーションとデリゲートによるプロパティ値の検証を行う。</summary>
-		/// <typeparam name="TProp">プロパティの型</typeparam>
-		/// <param name="value">プロパティ値</param>
-		/// <param name="errorMessage">エラーメッセージ。デリゲートを使用しない場合は不要。</param>
-		/// <param name="validation">エラーを<c>false</c>とする、検証を行うデリゲート。</param>
-		/// <param name="propertyName">プロパティ名。省略で呼び出し元のメンバー名。</param>
-		protected void ValidateProperty<TProp>(TProp value, string errorMessage,
-			Predicate<TProp> validation, [CallerMemberName] string propertyName = null) {
-			ErrorManager.ValidateProperty(value, errorMessage, validation, propertyName);
-		}
-		/// <summary>アノテーションとデリゲートによるプロパティ値の検証を行う。</summary>
-		/// <typeparam name="TProp">プロパティの型</typeparam>
-		/// <param name="value">プロパティ値</param>
-		/// <param name="validation">検証を行うマルチキャストデリゲート。<c>null</c>または空の文字列でない場合をエラーとする。</param>
-		/// <param name="propertyName">プロパティ名。省略で呼び出し元のメンバー名。</param>
-		protected void ValidateProperty<TProp>(TProp value, Func<TProp, string> validation, [CallerMemberName] string propertyName = null) {
-			this.ErrorManager.ValidateProperty(value, validation, propertyName);
-		}
-		/// <summary>アノテーションによるプロパティ値の検証を行う。</summary>
-		/// <param name="value">プロパティ値</param>
-		/// <param name="propertyName">プロパティ名</param>
-		protected void ValidateProperty<TProp>(TProp value, [CallerMemberName]string propertyName = null) {
-			this.ValidateProperty(value, null, propertyName);
-		}
-
-		event EventHandler<DataErrorsChangedEventArgs> INotifyDataErrorInfo.ErrorsChanged {
-			add { this.ErrorManager.ErrorsChanged += value; }
-			remove { this.ErrorManager.ErrorsChanged -= value; }
-		}
-
-		System.Collections.IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName) {
-			return this.ErrorManager.GetErrors(propertyName);
-		}
-
-		bool INotifyDataErrorInfo.HasErrors {
-			get { return this.HasErrors; }
-		}
-		/// <summary>検証エラーがあるかどうかを示す値を取得する。</summary>
-		[Premodel]
-		public bool HasErrors {
-			get { return this.ErrorManager.HasErrors; }
-		}
-		#endregion
-
-		#region INotifyPropertyChanged INotifyDataErrorInfo 共通
-		/// <summary>プロパティが変化する場合のみ値を更新し、アノテーションまたはデリゲートによるプロパティ値の検証と変更イベントを発行させる。
-		/// <para>この処理過程において、プロパティ変更通知の重複は無効とする。</para></summary>
-		/// <typeparam name="TProp">プロパティの型</typeparam>
-		/// <param name="storage">値を持つインスタンス</param>
-		/// <param name="value">変更後のプロパティ値</param>
-		/// <param name="errorMessage">エラーメッセージ。デリゲートを使用しない場合は不要。</param>
-		/// <param name="validation">エラーを false とする、検証を行うデリゲート。デリゲートを使用しない場合は省略可。</param>
-		/// <param name="propertyName">プロパティ名。省略で呼び出し元のメンバー名。</param>
-		/// <returns>値が変更された場合は<c>true</c>、それ以外は<c>false</c></returns>
-		protected bool SetProperty<TProp>(ref TProp storage, TProp value, string errorMessage,
-			Predicate<TProp> validation, [CallerMemberName] string propertyName = null) {
-			var isChanged = this.setProperty(ref storage, value, propertyName);
-			if (!isChanged) return false;
-			this.ValidateProperty(value, errorMessage, validation, propertyName);
-			return true;
-		}
-		/// <summary>プロパティが変化する場合のみ値を更新し、アノテーションまたはデリゲートによるプロパティ値の検証と変更イベントを発行させる。
-		/// <para>この処理過程において、プロパティ変更通知の重複は無効とする。</para></summary>
-		/// <typeparam name="TProp">プロパティの型</typeparam>
-		/// <param name="storage">値を持つインスタンス</param>
-		/// <param name="value">変更後のプロパティ値</param>
-		/// <param name="validation">検証を行うマルチキャストデリゲート。<c>null</c>または空の文字列でない場合をエラーとする。</param>
-		/// <param name="propertyName">プロパティ名。省略で呼び出し元のメンバー名。</param>
-		/// <returns>値が変更された場合は<c>true</c>、それ以外は<c>false</c></returns>
-		protected bool SetProperty<TProp>(ref TProp storage, TProp value, Func<TProp, string> validation, [CallerMemberName] string propertyName = null) {
-			var isChanged = this.setProperty(ref storage, value, propertyName);
-			if (!isChanged) return false;
-			this.ValidateProperty(value, validation, propertyName);
-			return true;
-		}
-		/// <summary>プロパティが変化する場合のみ値を更新し、アノテーションによるプロパティ値の検証と変更イベントを発行させる。
-		/// <para>この処理過程において、プロパティ変更通知の重複は無効とする。</para></summary>
-		/// <typeparam name="TProp">プロパティの型</typeparam>
-		/// <param name="storage">値を持つインスタンス</param>
-		/// <param name="value">変更後のプロパティ値</param>
-		/// <param name="propertyName">プロパティ名。省略で呼び出し元のメンバー名。</param>
-		/// <returns>値が変更された場合は<c>true</c>、それ以外は<c>false</c></returns>
-		protected bool SetProperty<TProp>(ref TProp storage, TProp value, [CallerMemberName] string propertyName = null) {
-			return this.SetProperty(ref storage, value, null, propertyName);
-
-		}
-		#endregion
-	}
-	*/
 }
