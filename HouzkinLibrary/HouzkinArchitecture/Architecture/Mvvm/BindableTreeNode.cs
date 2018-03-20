@@ -24,7 +24,12 @@ namespace Houzkin.Architecture {
 		/// <returns>現在のビューモデルに追加する、子ノードのビューモデル</returns>
 		protected abstract TViewModel GenerateChild(TModel modelChildNode);
 
-		private ReadOnlyBindableCollection<TViewModel> generateChildCollection(TModel model) {
+		/// <summary>
+		/// 子ノードのコレクションを生成する。デフォルトではGenerateChildメソッドを使用します。
+		/// </summary>
+		/// <param name="model">モデル</param>
+		/// <returns>ビューモデルコレクション</returns>
+		protected virtual ReadOnlyBindableCollection<TViewModel> GenerateChildCollection(TModel model) {
 			Func<TModel, TViewModel> conv = m => {
 				var c = GenerateChild(m);
 				c._parent = this as TViewModel;
@@ -38,12 +43,10 @@ namespace Houzkin.Architecture {
 			get { return _parent; }
 		}
 		ReadOnlyBindableCollection<TViewModel> 〆childNodes;
-		/// <summary>
-		/// 子ノードのコレクションを返す。デフォルトではオーバーライドした生成関数を使用しています。
-		/// </summary>
-		protected virtual ReadOnlyBindableCollection<TViewModel> ChildNodes {
+		
+		ReadOnlyBindableCollection<TViewModel> ChildNodes {
 			get {
-				if (〆childNodes == null) 〆childNodes = generateChildCollection(this.Model);
+				if (〆childNodes == null) 〆childNodes = GenerateChildCollection(this.Model);
 				return 〆childNodes;
 			}
 		}
