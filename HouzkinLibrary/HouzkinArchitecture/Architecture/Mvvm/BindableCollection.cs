@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -46,6 +47,12 @@ namespace Houzkin.Architecture {
 				return new MVMPair<TModel, TViewModel>(m, converter(m));
 			};
 			return new ReadOnlyBindableCollection<TViewModel>(source, generator);
+		}
+		/// <summary>空のビューモデルコレクションを生成する。</summary>
+		/// <typeparam name="TModel">モデルとする要素の型</typeparam>
+		/// <typeparam name="TViewModel">ビューモデルの型</typeparam>
+		public static ReadOnlyBindableCollection<TViewModel> Empty<TModel,TViewModel>(){
+			return new ReadOnlyBindableCollection<TViewModel>(new ObservableCollection<TModel>());
 		}
 
 		internal class MVMPair {
@@ -135,6 +142,11 @@ namespace Houzkin.Architecture {
 		protected ReadOnlyBindableCollection(IEnumerable source, Func<object, TViewModel> converter)
 			: this(source, new Func<object, MVMPair>(src => new MVMPair<object, TViewModel>(src, converter(src)))) { }
 
+		/// <summary>空のコレクションを初期化する。</summary>
+		/// <param name="source"></param>
+		internal ReadOnlyBindableCollection(IEnumerable source) : base(source){
+			_pairs = new List<MVMPair>();
+		}
 		void CollectionChangedAction(object sender, NotifyCollectionChangedEventArgs e) {
 			ThrowExceptionIfDisposed();
 			//新規リストに並べ替えられた要素を格納

@@ -38,18 +38,21 @@ namespace Houzkin.Architecture {
 			get { return _parent; }
 		}
 		ReadOnlyBindableCollection<TViewModel> 〆childNodes;
-		ReadOnlyBindableCollection<TViewModel> childNodes {
+		/// <summary>
+		/// 子ノードのコレクションを返す。デフォルトではオーバーライドした生成関数を使用しています。
+		/// </summary>
+		protected virtual ReadOnlyBindableCollection<TViewModel> ChildNodes {
 			get {
 				if (〆childNodes == null) 〆childNodes = generateChildCollection(this.Model);
 				return 〆childNodes;
 			}
 		}
 		IReadOnlyList<TViewModel> IReadOnlyTreeNode<TViewModel>.Children {
-			get { return childNodes; }
+			get { return ChildNodes; }
 		}
 		/// <summary>子ノードのコレクションを取得する。</summary>
 		public ReadOnlyBindableCollection<TViewModel> Children {
-			get { return childNodes; }
+			get { return ChildNodes; }
 		}
 		
 	}
