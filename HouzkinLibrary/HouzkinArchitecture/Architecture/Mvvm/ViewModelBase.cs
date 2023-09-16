@@ -13,14 +13,14 @@ using System.Windows;
 namespace Houzkin.Architecture {
 	/// <summary>MVVMパターンにおけるビューモデルとしての機能を提供する。</summary>
 	/// <typeparam name="TModel">モデルの型</typeparam>
-	public class DynamicViewModel<TModel> : DynamicViewModel {
+	public class ViewModelBase<TModel> : ViewModelBase {
 
 		///// <summary>新しいインスタンスを初期化する。</summary>
 		//public MarshalViewModel() : base() { }
 
 		/// <summary>新しいインスタンスを初期化する。</summary>
 		/// <param name="model">参照するモデル</param>
-		public DynamicViewModel(TModel model) : base(model) { }
+		public ViewModelBase(TModel model) : base(model) { }
 
 		/// <summary>モデルを取得、設定する。</summary>
 		protected TModel Model {
@@ -30,24 +30,22 @@ namespace Houzkin.Architecture {
 		}
 	}
 	/// <summary>MVVMパターンにおけるビューモデルとしての機能を提供する。</summary>
-	public class DynamicViewModel : BindableObject, INotifyDataErrorInfo {
+	public class ViewModelBase : BindableObject, INotifyDataErrorInfo {
 		/// <summary>新規インスタンスを初期化する。</summary>
 		/// <param name="model">モデル</param>
-		public DynamicViewModel(object model) : base(model) { }
-
-		/// <summary>MvpvmViewModelを初期化するときに呼び出す。</summary>
-		internal DynamicViewModel() : base() { }
-		#region		INotifyDataErrorInfo の実装
-		DataErrorNotificationManager _em;
-		private DataErrorNotificationManager ErrorManager {
-			get {
-				if (_em == null) {
-					_em = new DataErrorNotificationManager(this);
-					_em.PropertyChanged += (s, e) => OnPropertyChanged(e.PropertyName);
-				}
-				return _em;
-			}
+		public ViewModelBase(object model) : base(model) {
+			_context = new ValidationContext(this);
 		}
+
+		/// <summary>新規インスタンスを初期化する。</summary>
+		public ViewModelBase() : base() {
+			_context = new ValidationContext(this);
+		}
+		#region		INotifyDataErrorInfo の実装
+
+		ValidationContext _context;
+		readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
+
 		/// <summary>アノテーションとデリゲートによるプロパティ値の検証を行う。</summary>
 		/// <typeparam name="TProp">プロパティの型</typeparam>
 		/// <param name="value">プロパティ値</param>
@@ -56,8 +54,12 @@ namespace Houzkin.Architecture {
 		/// <param name="propertyName">プロパティ名。省略で呼び出し元のメンバー名。</param>
 		protected void ValidateProperty<TProp>(TProp value, string errorMessage,
 			Predicate<TProp> validation, [CallerMemberName] string propertyName = null) {
-			ThrowExceptionIfDisposed();
-			ErrorManager.ValidateProperty(value, errorMessage, validation, propertyName);
+			this.ValidateProperty(value, propertyName);
+			if (validation != null && !string.IsNullOrEmpty(errorMessage))
+			{
+				if (!validation(value))
+					SetError(errorMessage, propertyName);
+			}
 		}
 		/// <summary>アノテーションとデリゲートによるプロパティ値の検証を行う。</summary>
 		/// <typeparam name="TProp">プロパティの型</typeparam>
@@ -65,30 +67,68 @@ namespace Houzkin.Architecture {
 		/// <param name="validation">検証を行うマルチキャストデリゲート。<c>null</c>または空の文字列でない場合をエラーとする。</param>
 		/// <param name="propertyName">プロパティ名。省略で呼び出し元のメンバー名。</param>
 		protected void ValidateProperty<TProp>(TProp value, Func<TProp, string> validation, [CallerMemberName] string propertyName = null) {
-			ThrowExceptionIfDisposed();
-			ErrorManager.ValidateProperty(value, validation, propertyName);
+			this.ValidateProperty(value, propertyName);
+			if (validation != null)
+			{
+				foreach (Func<TProp, string> vali in validation.GetInvocationList())
+				{
+					var msg = vali(value);
+					if (!string.IsNullOrEmpty(msg)) SetError(msg, propertyName);
+				}
+			}
 		}
 		/// <summary>アノテーションによるプロパティ値の検証を行う。</summary>
 		/// <param name="value">プロパティ値</param>
 		/// <param name="propertyName">プロパティ名</param>
 		protected void ValidateProperty<TProp>(TProp value, [CallerMemberName]string propertyName = null) {
-			this.ValidateProperty(value, null, propertyName);
+			ThrowExceptionIfDisposed();
+			_context.MemberName = propertyName;
+			this.ClearError(propertyName);
+			var ve = new List<ValidationResult>();
+			if (!Validator.TryValidateProperty(value, _context, ve))
+			{
+				var ers = ve.Select(x => x.ErrorMessage);
+				foreach (var er in ers)
+				{
+					SetError(er, propertyName);
+				}
+			}
 		}
 		internal virtual void OnErrorsChanged(object sender, DataErrorsChangedEventArgs e) {
 			ThrowExceptionIfDisposed();
-			this.ErrorManager.OnErrorsChanged(e.PropertyName);
+			this.ErrorsChanged?.Invoke(this, e);
+		}
+		protected virtual void OnErrorsChanged(string propName)
+		{
+			this.OnErrorsChanged(this, new DataErrorsChangedEventArgs(propName));
 		}
 		internal virtual System.Collections.IEnumerable GetErrors(string propertyName) {
-			return this.ErrorManager.GetErrors(propertyName);
+			if (string.IsNullOrEmpty(propertyName) || !_errors.ContainsKey(propertyName)) return null;
+			return _errors[propertyName];
 		}
 		/// <summary>検証エラーがあるかどうかを示す値を取得する。</summary>
 		public virtual bool HasErrors {
-			get { return this.ErrorManager.HasErrors; }
+			get { return _errors.Any(); }
 		}
-		event EventHandler<DataErrorsChangedEventArgs> INotifyDataErrorInfo.ErrorsChanged {
-			add { this.ErrorManager.ErrorsChanged += value; }
-			remove { this.ErrorManager.ErrorsChanged -= value; }
+		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+		
+		void SetError(string errorMessage,string propName)
+		{
+			if (!_errors.ContainsKey(propName)) _errors[propName] = new List<string>();
+			if (!_errors[propName].Contains(errorMessage))
+			{
+				_errors[propName].Add(errorMessage);
+				OnErrorsChanged(propName);
+			}
+			this.OnPropertyChanged(nameof(HasErrors));
 		}
+		void ClearError(string propName)
+		{
+			if(_errors.ContainsKey(propName)) _errors.Remove(propName);
+			OnErrorsChanged(propName);
+			OnPropertyChanged(nameof(HasErrors));
+		}
+
 
 		#region interface
 		bool INotifyDataErrorInfo.HasErrors {
@@ -101,6 +141,7 @@ namespace Houzkin.Architecture {
 
 		#endregion
 
+		#region override
 		/// <summary>プロパティが変化する場合のみ値を更新し、アノテーションまたはデリゲートによるプロパティ値の検証と変更イベントを発行させる。
 		/// <para>この処理過程において、プロパティ変更通知の重複は無効とする。</para></summary>
 		/// <typeparam name="TProp">プロパティの型</typeparam>
@@ -141,7 +182,7 @@ namespace Houzkin.Architecture {
 		protected override bool SetProperty<TProp>(ref TProp storage, TProp value, [CallerMemberName] string propertyName = null) {
 			return this.SetProperty(ref storage, value, null, propertyName);
 		}
-		
+		#endregion
 	}
 
 }

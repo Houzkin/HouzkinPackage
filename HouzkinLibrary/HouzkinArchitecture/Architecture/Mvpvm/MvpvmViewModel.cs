@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel;
 using System.Collections;
 using Livet.EventListeners.WeakEvents;
+using Houzkin.Architecture.Dynamic;
 
 namespace Houzkin.Architecture.Mvpvm {
 	

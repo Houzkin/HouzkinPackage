@@ -75,15 +75,18 @@
   <ItemGroup>
     <Compile Include="Architecture\AsyncListenerCommand.cs" />
     <Compile Include="Architecture\AsyncViewModelCommand.cs" />
+    <Compile Include="Architecture\Mvvm\BindableTreeNode.cs" />
+    <Compile Include="Architecture\Mvvm\BindableObject.cs" />
+    <Compile Include="Architecture\Mvvm\ViewModelBase.cs" />
     <Compile Include="Architecture\obs\AsyncRelayCommand.cs" />
     <Compile Include="Architecture\Mvvm\BindableCollection.cs" />
     <Compile Include="Architecture\obs\WeakEventListener.cs" />
     <Compile Include="Architecture\DataErrorNotificationManager.cs" />
-    <Compile Include="Architecture\Mvvm\BindableObject.cs" />
-    <Compile Include="Architecture\Mvvm\BindableTreeNode.cs" />
+    <Compile Include="Architecture\Mvvm\Dynamic\DynamicBindableObject.cs" />
+    <Compile Include="Architecture\Mvvm\Dynamic\BindableTreeNode.cs" />
     <Compile Include="Architecture\obs\NotificationObject.cs" />
     <Compile Include="Architecture\Mvpvm\Attribute.cs" />
-    <Compile Include="Architecture\Mvvm\DynamicViewModel.cs" />
+    <Compile Include="Architecture\Mvvm\Dynamic\DynamicViewModel.cs" />
     <Compile Include="Architecture\ChangedEvnetManager.cs" />
     <Compile Include="Architecture\obs\RelayUICommand.cs" />
     <Compile Include="Architecture\Mvpvm\MvpvmPresenter.cs" />
@@ -112,6 +115,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

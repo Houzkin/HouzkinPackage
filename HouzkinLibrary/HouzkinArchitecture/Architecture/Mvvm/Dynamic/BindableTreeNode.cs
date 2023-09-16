@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Collections;
 
-namespace Houzkin.Architecture {
+namespace Houzkin.Architecture.Dynamic {
 	/// <summary>外部への公開用に共通のメンバーを定義可能な、ビューによってバインドされるツリー構造として参照元のノードをラップする。</summary>
 	/// <typeparam name="TViewModel">各ノードの共通実装部分として公開する型</typeparam>
 	/// <typeparam name="TModel">各ノードが内包するモデルの型</typeparam>
-	public abstract class ReadOnlyBindableTreeNode<TModel,TViewModel> : ViewModelBase<TModel> , IReadOnlyTreeNode<TViewModel>, IDisposable
-	where TViewModel : ReadOnlyBindableTreeNode<TModel,TViewModel>
+	public abstract class ReadOnlyBindableDynamicTreeNode<TModel,TViewModel> : DynamicViewModel<TModel> , IReadOnlyTreeNode<TViewModel>, IDisposable
+	where TViewModel : ReadOnlyBindableDynamicTreeNode<TModel,TViewModel>
 	where TModel : IReadOnlyObservableTreeNode<TModel> {
 		/// <summary>新規インスタンスを初期化する。
 		/// <para>このオブジェクトは親ノードから生成された場合のみ親ノードの参照を保持する。</para></summary>
 		/// <param name="model">参照するノード</param>
-		protected ReadOnlyBindableTreeNode(TModel model) : base(model) { }// { _model = model; }
+		protected ReadOnlyBindableDynamicTreeNode(TModel model) : base(model) { }// { _model = model; }
 
 		/// <summary>現在のビューモデルが参照するソースの子ノードから現在のビューモデルの子ノードを生成する。</summary>
 		/// <param name="modelChildNode">ソースの子ノード</param>
@@ -61,11 +61,11 @@ namespace Houzkin.Architecture {
 	}
 	/// <summary>ビューによってバインドされる簡易的なツリー構造として参照元のノードをラップする。</summary>
 	/// <typeparam name="TModel">各ノードが内包するモデルの型</typeparam>
-	public abstract class ReadOnlyBindableTreeNode<TModel> : ReadOnlyBindableTreeNode<TModel, ReadOnlyBindableTreeNode<TModel>>
+	public abstract class ReadOnlyBindableDynamicTreeNode<TModel> : ReadOnlyBindableDynamicTreeNode<TModel, ReadOnlyBindableDynamicTreeNode<TModel>>
 	where TModel : IReadOnlyObservableTreeNode<TModel> {
 		/// <summary>新規インスタンスを初期化する。</summary>
 		/// <param name="model">参照するノード</param>
-		public ReadOnlyBindableTreeNode(TModel model) : base(model) { }
+		public ReadOnlyBindableDynamicTreeNode(TModel model) : base(model) { }
 	}
 	//public static class ReadOnlyBindableTreeNode {
 	//	public static TViewModel Create<TModel,TViewModel>(TModel root, Func<TModel,TViewModel> generate)
