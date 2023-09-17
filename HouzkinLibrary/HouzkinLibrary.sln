@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Houzkin.Utility", "HouzkinU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Houzkin.Tree", "Houzkin.Tree\Houzkin.Tree.csproj", "{51E371DC-E8EB-4223-AFE1-3F823A36E134}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppLogger", "AppLogger\AppLogger.csproj", "{26EFDEA6-13EB-4E14-A8B5-FCF9E8277DC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{51E371DC-E8EB-4223-AFE1-3F823A36E134}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51E371DC-E8EB-4223-AFE1-3F823A36E134}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51E371DC-E8EB-4223-AFE1-3F823A36E134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26EFDEA6-13EB-4E14-A8B5-FCF9E8277DC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26EFDEA6-13EB-4E14-A8B5-FCF9E8277DC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26EFDEA6-13EB-4E14-A8B5-FCF9E8277DC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26EFDEA6-13EB-4E14-A8B5-FCF9E8277DC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

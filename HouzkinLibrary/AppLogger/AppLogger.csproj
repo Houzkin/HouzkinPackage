@@ -7,4 +7,10 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Houzkin.TreeStructure\Houzkin.TreeStructure.csproj" />
+    <ProjectReference Include="..\HouzkinArchitecture\Houzkin.Architecture.csproj" />
+    <ProjectReference Include="..\Houzkin\Houzkin.csproj" />
+  </ItemGroup>
+
 </Project>

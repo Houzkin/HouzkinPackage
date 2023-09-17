@@ -25,17 +25,20 @@ namespace Houzkin.Architecture {
 		protected abstract TViewModel GenerateChild(TModel modelChildNode);
 
 		/// <summary>
-		/// 子ノードのコレクションを生成する。デフォルトではGenerateChildメソッドを使用します。
+		/// 観測対象となる、子ノードのコレクションのインスタンスを取得する。デフォルトでは引数として受け取る、モデルの子ノードのコレクションをそのまま返します。
 		/// </summary>
-		/// <param name="model">モデル</param>
-		/// <returns>ビューモデルコレクション</returns>
-		protected virtual ReadOnlyBindableCollection<TViewModel> GenerateChildCollection(TModel model) {
+		/// <param name="modelChildNodes">モデルの子ノードのコレクション</param>
+		/// <returns>子ノードとして扱う観測可能なコレクション</returns>
+		protected virtual IEnumerable<TModel> DesignateChildCollection(IEnumerable<TModel> modelChildNodes) {
+			return modelChildNodes;
+		}
+		private ReadOnlyBindableCollection<TViewModel> _GenerateChildCollection(IEnumerable<TModel> source) {
 			Func<TModel, TViewModel> conv = m => {
 				var c = GenerateChild(m);
 				c._parent = this as TViewModel;
 				return c;
 			};
-			return ReadOnlyBindableCollection.Create(model.Children, conv);
+			return ReadOnlyBindableCollection.Create(DesignateChildCollection(source), conv);
 		}
 		TViewModel _parent;
 		/// <summary>親ノードを取得する。</summary>
@@ -46,7 +49,7 @@ namespace Houzkin.Architecture {
 		
 		ReadOnlyBindableCollection<TViewModel> ChildNodes {
 			get {
-				if (〆childNodes == null) 〆childNodes = GenerateChildCollection(this.Model);
+				if (〆childNodes == null) 〆childNodes = _GenerateChildCollection(this.Model.Children);
 				return 〆childNodes;
 			}
 		}

@@ -63,7 +63,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 #endregion
 using Houzkin.Architecture;
 namespace TestSpace {
-	
+
 	//以下 テストコード
 	class Program {
 		static void Main(string[] args) {
