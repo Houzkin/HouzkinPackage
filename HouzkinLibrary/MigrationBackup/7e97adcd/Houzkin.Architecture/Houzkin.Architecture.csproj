@@ -42,6 +42,21 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Livet.Core, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
+      <HintPath>..\packages\LivetCask.Core.4.0.2\lib\net452\Livet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Livet.EventListeners, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
+      <HintPath>..\packages\LivetCask.EventListeners.4.0.2\lib\net452\Livet.EventListeners.dll</HintPath>
+    </Reference>
+    <Reference Include="Livet.Messaging, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
+      <HintPath>..\packages\LivetCask.Messaging.4.0.2\lib\net452\Livet.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Livet.Mvvm, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
+      <HintPath>..\packages\LivetCask.Mvvm.4.0.2\lib\net452\Livet.Mvvm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.31\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -87,9 +102,9 @@
     <Content Include="Architecture\Mvpvm\AboutMvpvmPattern.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Houzkin.TreeStructure\Houzkin.TreeStructure.csproj">
+    <ProjectReference Include="..\Houzkin.TreeStructure\Houzkin.Tree.csproj">
       <Project>{51b0c6d1-acf6-4f9e-99ce-6a30781923e1}</Project>
-      <Name>Houzkin.TreeStructure</Name>
+      <Name>Houzkin.Tree</Name>
     </ProjectReference>
     <ProjectReference Include="..\Houzkin\Houzkin.csproj">
       <Project>{279970c5-1ba0-4259-acd6-40b9604cae2d}</Project>
@@ -98,17 +113,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="LivetCask.Mvvm">
-      <Version>4.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="NuGet.Build.Tasks.Pack">
-      <Version>6.7.0</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

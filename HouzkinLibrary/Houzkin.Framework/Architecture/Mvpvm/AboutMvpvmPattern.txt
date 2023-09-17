@@ -1,0 +1,37 @@
+﻿
+about Mvpvm Pattern
+
+●View
+	結合:
+		member DataContext <- ViewModel as object
+	XAMLによって外観の記述を行う
+	View内部で完結するロジックはコードビハインドに記述。
+
+●ViewModel 
+	DynamicObjectの継承によってModelのメンバーをViewに公開
+	ViewとViewModel間で完結する検証のみ行って良い
+	ViewModelで手におえない処理はPresenterのPreModel属性の使用されたメンバーに委ね、
+	必要ならMaybeSet・Getメソッドを使用してワンクッションおく
+	別プロセスによるプロパティ値変更の反映にModelWrapping属性を使用
+	ビュー、プレゼンター、モデルに依存しない
+
+●Presenter
+	結合:
+		member View <- View where TView
+		member Model <- Model where TModel
+		member ViewModel <- ViewModel where MvpViewModel
+	Viewのインスタンスと変更不可能な対とし、View設定時、Viewのイベントハンドラーを設定可能
+	ViewModel同様、ModelWrapping属性を使用可能
+	PreModel属性によってPresenter内のメンバーをModelのメンバーより優先的にViewに公開
+	Presenterのプロパティ変更通知、エラー変更通知はViewModelにハンドルされる
+	上記属性を使用し、外観の操作を行うロジックを記述する
+	ViewにとってViewModelであり、ViewModelにとってModelであり、ModelにとってViewModelである存在
+	原則、Viewのみを操作。必要ならばViewModel。他に解決策がない場合はModel。
+
+●Model
+	INotifyPropertyChangedを実装し、複数のPresenterまたはViewModelから参照されることを想定する
+	このインターフェイスを実装しなかった場合、ほかのPresenterまたはModel自身による変更に対応できない
+
+画面遷移などViewを操作するロジックが必要またはPresenterをツリー構造にして使用したい場合のみPresenterを配置。
+原則、MVVMパターンを使用。
+新たにプレゼンターが必要ないコントロールにはMVVMパターンのビューモデルをプレゼンターが管理・使用する

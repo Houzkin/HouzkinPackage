@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Houzkin")]
 [assembly: AssemblyProduct("Houzkin.Tree")]
-[assembly: AssemblyCopyright("Copyright © Norihiro")]
+[assembly: AssemblyCopyright("Copyright © Houzkin")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

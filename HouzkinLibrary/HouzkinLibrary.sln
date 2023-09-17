@@ -1,15 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Houzkin", "Houzkin\Houzkin.csproj", "{279970C5-1BA0-4259-ACD6-40B9604CAE2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Houzkin.Tree", "Houzkin.TreeStructure\Houzkin.Tree.csproj", "{51B0C6D1-ACF6-4F9E-99CE-6A30781923E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Houzkin.TreeStructure", "Houzkin.TreeStructure\Houzkin.TreeStructure.csproj", "{51B0C6D1-ACF6-4F9E-99CE-6A30781923E1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Houzkin.Architecture", "HouzkinArchitecture\Houzkin.Architecture.csproj", "{194DE8C1-B033-4909-AF59-291C6F18E0C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSpace", "TestSpace\TestSpace.csproj", "{8D9069E8-3250-454F-BFA4-284E2783A0CC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Houzkin.Utility", "HouzkinUtility\Houzkin.Utility.csproj", "{BBE04410-B218-4221-91DD-0680D0E8E421}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Houzkin.Tree", "Houzkin.Tree\Houzkin.Tree.csproj", "{51E371DC-E8EB-4223-AFE1-3F823A36E134}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,21 +24,29 @@ Global
 		{279970C5-1BA0-4259-ACD6-40B9604CAE2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{279970C5-1BA0-4259-ACD6-40B9604CAE2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{279970C5-1BA0-4259-ACD6-40B9604CAE2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{279970C5-1BA0-4259-ACD6-40B9604CAE2D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{51B0C6D1-ACF6-4F9E-99CE-6A30781923E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{51B0C6D1-ACF6-4F9E-99CE-6A30781923E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51B0C6D1-ACF6-4F9E-99CE-6A30781923E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{51B0C6D1-ACF6-4F9E-99CE-6A30781923E1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{194DE8C1-B033-4909-AF59-291C6F18E0C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{194DE8C1-B033-4909-AF59-291C6F18E0C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{194DE8C1-B033-4909-AF59-291C6F18E0C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{194DE8C1-B033-4909-AF59-291C6F18E0C0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8D9069E8-3250-454F-BFA4-284E2783A0CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8D9069E8-3250-454F-BFA4-284E2783A0CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D9069E8-3250-454F-BFA4-284E2783A0CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D9069E8-3250-454F-BFA4-284E2783A0CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBE04410-B218-4221-91DD-0680D0E8E421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBE04410-B218-4221-91DD-0680D0E8E421}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBE04410-B218-4221-91DD-0680D0E8E421}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBE04410-B218-4221-91DD-0680D0E8E421}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51E371DC-E8EB-4223-AFE1-3F823A36E134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51E371DC-E8EB-4223-AFE1-3F823A36E134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51E371DC-E8EB-4223-AFE1-3F823A36E134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51E371DC-E8EB-4223-AFE1-3F823A36E134}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {178B6DCA-0482-4652-A5D7-C5E2E728F269}
 	EndGlobalSection
 EndGlobal

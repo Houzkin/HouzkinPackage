@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Architecture\Mvpvm\AboutMvpvmPattern.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Architecture\Mvpvm\AboutMvpvmPattern.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LivetCask.Mvvm" Version="4.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Houzkin.Tree\Houzkin.Tree.csproj" />
+    <ProjectReference Include="..\HouzkinUtility\Houzkin.Utility.csproj" />
+  </ItemGroup>
+
+</Project>

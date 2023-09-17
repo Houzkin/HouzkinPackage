@@ -73,9 +73,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Houzkin.TreeStructure\Houzkin.Tree.csproj">
+    <ProjectReference Include="..\Houzkin.TreeStructure\Houzkin.TreeStructure.csproj">
       <Project>{51b0c6d1-acf6-4f9e-99ce-6a30781923e1}</Project>
-      <Name>Houzkin.Tree</Name>
+      <Name>Houzkin.TreeStructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\HouzkinArchitecture\Houzkin.Architecture.csproj">
       <Project>{194de8c1-b033-4909-af59-291c6f18e0c0}</Project>

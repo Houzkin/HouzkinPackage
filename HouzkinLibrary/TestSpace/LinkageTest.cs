@@ -8,6 +8,26 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace TestSpace {
+
+	/**
+	 * memo
+	 * 
+	 * Houzkin
+	 * ↓
+	 * Houzkin.TreeStructure
+	 * ↓
+	 * Houzkin.Architecture 
+	 * 
+	 * 
+	 * Houzkin.Utility
+	 * ↓
+	 * Houzkin.Tree
+	 * ↓
+	 * Houzkin.Framework(参照が上手くいかないので削除)
+	 * 
+	 * 
+	 * 
+	 */
 	//public static class LpTestSpace {
 	//	public static void Run() {
 	//		var n1 = new LpAgeNode("n1");
