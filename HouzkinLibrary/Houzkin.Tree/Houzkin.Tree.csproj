@@ -5,11 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>$(VersionPrefix)1.1.0</Version>
+    <Version>$(VersionPrefix)1.1.1</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Houzkin</Authors>
     <Description>各ノードが親と子の参照を保持するツリー構造を提供する。</Description>
     <PackageIcon>houzkin02.JPG</PackageIcon>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

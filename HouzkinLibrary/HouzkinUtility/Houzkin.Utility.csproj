@@ -5,12 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <PackageId>Houzkin</PackageId>
     <Authors>Houzkin</Authors>
     <Description>標準ライブラリのオリジナル拡張</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>houzkin02.JPG</PackageIcon>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

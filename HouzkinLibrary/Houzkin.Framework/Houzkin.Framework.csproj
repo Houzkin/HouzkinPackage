@@ -6,11 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>$(VersionPrefix)1.1.1</Version>
+    <Version>$(VersionPrefix)1.1.2</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Houzkin</Authors>
     <Description>MVVMをサポートするライブラリ</Description>
     <PackageIcon>houzkin02.JPG</PackageIcon>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
