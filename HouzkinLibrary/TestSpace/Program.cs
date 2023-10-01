@@ -65,8 +65,8 @@ using Houzkin.Architecture;
 namespace TestSpace {
 
 	//以下 テストコード
-	class Program {
-		static void Main(string[] args) {
+	class ProgramAbs {
+		static void Mainabs(string[] args) {
 			var bo = new BindableObject("sss");
 			var model = new TestModel();
 			var listener = new PropertyTreeChangedWeakEventListener<TestModel>(model);
