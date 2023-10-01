@@ -4,7 +4,20 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>$(VersionPrefix)1.1.0</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Houzkin</Authors>
+    <Description>各ノードが親と子の参照を保持するツリー構造を提供する。</Description>
+    <PackageIcon>houzkin02.JPG</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="D:\user\Pictures\snsIcons\houzkin02.JPG">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HouzkinUtility\Houzkin.Utility.csproj" />

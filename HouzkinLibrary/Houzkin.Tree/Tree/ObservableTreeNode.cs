@@ -237,7 +237,7 @@ namespace Houzkin.Tree {
 		}
 		private class DisposingCollection : Collection<IDisposable>, IDisposable {
 			public DisposingCollection(IEnumerable<IDisposable> collection) 
-				: base(collection.ToArray()) { }
+				: base(collection.ToList()) { }
 			public void Dispose() {
 				foreach (var dsp in this) dsp.Dispose();
 				this.Clear();

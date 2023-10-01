@@ -71,12 +71,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Houzkin\Houzkin.csproj">
-      <Project>{279970c5-1ba0-4259-acd6-40b9604cae2d}</Project>
-      <Name>Houzkin</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="NuGet.Build.Tasks.Pack">
       <Version>6.7.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -9,6 +9,7 @@ using System.Windows;
 using System.Reflection;
 using System.Collections.Specialized;
 using Livet.EventListeners.WeakEvents;
+using DependencyProperty = System.Windows.DependencyProperty;
 
 namespace Houzkin.Architecture.Mvpvm {
 

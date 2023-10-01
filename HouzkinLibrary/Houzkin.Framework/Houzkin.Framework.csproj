@@ -1,9 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>$(VersionPrefix)1.1.1</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Houzkin</Authors>
+    <Description>MVVMをサポートするライブラリ</Description>
+    <PackageIcon>houzkin02.JPG</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +19,13 @@
 
   <ItemGroup>
     <Content Include="Architecture\Mvpvm\AboutMvpvmPattern.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\user\Pictures\snsIcons\houzkin02.JPG">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
