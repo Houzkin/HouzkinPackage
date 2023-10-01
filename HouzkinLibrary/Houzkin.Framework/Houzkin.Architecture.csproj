@@ -1,18 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>$(VersionPrefix)1.1.1</Version>
+    <Version>$(VersionPrefix)1.1.2</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Houzkin</Authors>
-    <Description>各ノードが親と子の参照を保持するツリー構造を提供する。</Description>
+    <Description>MVVMをサポートするライブラリ</Description>
     <PackageIcon>houzkin02.JPG</PackageIcon>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <RepositoryUrl>https://github.com/Houzkin/HouzkinPackage</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Architecture\**" />
+    <EmbeddedResource Remove="Architecture\**" />
+    <None Remove="Architecture\**" />
+    <Page Remove="Architecture\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="D:\user\Pictures\snsIcons\houzkin02.JPG">
@@ -22,6 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="LivetCask.Mvvm" Version="4.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Houzkin.Tree\Houzkin.Tree.csproj" />
     <ProjectReference Include="..\HouzkinUtility\Houzkin.Utility.csproj" />
   </ItemGroup>
 

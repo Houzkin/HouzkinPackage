@@ -12,6 +12,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>houzkin02.JPG</PackageIcon>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <RepositoryUrl>https://github.com/Houzkin/HouzkinPackage</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

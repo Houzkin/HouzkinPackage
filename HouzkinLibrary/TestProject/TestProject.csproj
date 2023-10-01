@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Houzkin.Framework\Houzkin.Framework.csproj" />
+    <ProjectReference Include="..\Houzkin.Architecture\Houzkin.Architecture.csproj" />
     <ProjectReference Include="..\Houzkin.Tree\Houzkin.Tree.csproj" />
     <ProjectReference Include="..\HouzkinUtility\Houzkin.Utility.csproj" />
   </ItemGroup>

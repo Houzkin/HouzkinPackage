@@ -77,10 +77,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Houzkin.Framework\Houzkin.Framework.csproj">
-      <Project>{31d24acb-332f-4612-afb0-b01cfa96dc2d}</Project>
-      <Name>Houzkin.Framework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Houzkin.Tree\Houzkin.Tree.csproj">
       <Project>{51e371dc-e8eb-4223-afe1-3f823a36e134}</Project>
       <Name>Houzkin.Tree</Name>
