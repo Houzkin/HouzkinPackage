@@ -40,7 +40,7 @@ namespace Houzkin {
 		/// <summary>結果によって実行する処理を振り分ける。</summary>
 		/// <param name="caseTrue">結果が true だった場合の処理</param>
 		/// <param name="caseFalse">結果が false だった場合の処理</param>
-		public ResultWithValue<TValue> TrueOrNot(Action<TValue> caseTrue = null, Action<TValue> caseFalse = null) {
+		public ResultWithValue<TValue> TrueOrNot(Action<TValue>? caseTrue = null, Action<TValue>? caseFalse = null) {
 			if (this) {
 				caseTrue?.Invoke(this.Value);
 			} else {

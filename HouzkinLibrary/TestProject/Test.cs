@@ -9,12 +9,17 @@ using Houzkin.Tree;
 namespace TestProject {
 	public static class Program {
 		public static void Main(string[] args) {
-			var r = new RootTree();
-			var chl1 = new BaseTree();
-			r.AddChild(chl1);
-			Console.WriteLine(r.Children.Count);
-			r.DismantleDescendants();
-			Console.WriteLine(r.Children.Count);
+
+			var dic = new Dictionary<int, string>();
+			dic.Add(1, "AAA");
+			dic.Add(2, "BBB");
+			var rst = ResultWithValue.Of<int, string>(dic.TryGetValue);
+			//var r = new RootTree();
+			//var chl1 = new BaseTree();
+			//r.AddChild(chl1);
+			//Console.WriteLine(r.Children.Count);
+			//r.DismantleDescendants();
+			//Console.WriteLine(r.Children.Count);
 
 			Console.ReadKey();
 		}

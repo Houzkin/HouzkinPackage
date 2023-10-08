@@ -7,4 +7,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Houzkin.Architecture\Houzkin.Architecture.csproj" />
+    <ProjectReference Include="..\Houzkin.Tree\Houzkin.Tree.csproj" />
+    <ProjectReference Include="..\HouzkinUtility\Houzkin.Utility.csproj" />
+  </ItemGroup>
+
 </Project>
