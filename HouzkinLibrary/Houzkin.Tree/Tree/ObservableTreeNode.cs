@@ -81,12 +81,15 @@ namespace Houzkin.Tree {
 		#endregion
 		/// <summary>インスタンスが破棄されたときに発生する。</summary>
 		[field: NonSerialized]
-		public event EventHandler Disposed;
+		public event EventHandler? Disposed;
 
 		/// <summary>リソースを破棄する。</summary>
 		protected override void Dispose(bool disposing) {
 			base.Dispose(disposing);
-			if (Disposed != null) Disposed(this, EventArgs.Empty);
+			if (Disposed != null) {
+				Disposed(this, EventArgs.Empty);
+				Disposed = null;
+			}
 		}
 		[NonSerialized]
 		private EventManager _em;
