@@ -10,7 +10,6 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Houzkin</Authors>
     <Description>MVVMをサポートするライブラリ</Description>
-    <PackageIcon>houzkin02.JPG</PackageIcon>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RepositoryUrl>https://github.com/Houzkin/HouzkinPackage</RepositoryUrl>
   </PropertyGroup>
@@ -21,13 +20,6 @@
 
   <ItemGroup>
     <Content Include="Architecture\Mvpvm\AboutMvpvmPattern.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="D:\user\Pictures\snsIcons\houzkin02.JPG">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
   </ItemGroup>
 
   <ItemGroup>

@@ -10,20 +10,12 @@
     <Authors>Houzkin</Authors>
     <Description>標準ライブラリのオリジナル拡張</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIcon>houzkin02.JPG</PackageIcon>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RepositoryUrl>https://github.com/Houzkin/HouzkinPackage</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Collections\objectmodel\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="D:\user\Pictures\snsIcons\houzkin02.JPG">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
   </ItemGroup>
 
 </Project>
