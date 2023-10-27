@@ -57,10 +57,6 @@ namespace AppLogger {
         }
 
         public string Name { get; set; }
-		public string Path { 
-			get {
-				return string.Join("/",this.NodePath(a=>a.Name));
-			} 
-		}
+		
 	}
 }

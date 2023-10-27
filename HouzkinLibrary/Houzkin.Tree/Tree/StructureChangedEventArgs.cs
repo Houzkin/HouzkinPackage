@@ -11,7 +11,7 @@ namespace Houzkin.Tree {
 	[Serializable]
 	public sealed class ChangedAncestorInfo<TNode> {
 		/// <summary>変更前の祖先ノード。</summary>
-		public TNode PreviousParentOfTarget { get; private set; }
+		public TNode? PreviousParentOfTarget { get; private set; }
 		/// <summary>移動した祖先ノード。</summary>
 		public TNode MovedTarget { get; private set; }
 		/// <summary>移動前に振り当てられていたインデックス。<para>親ノードが存在しなかった場合は -1。</para></summary>
@@ -23,7 +23,7 @@ namespace Houzkin.Tree {
 		/// <param name="previous">移動元ノード</param>
 		/// <param name="oldIndex">移動前に振り当てられていたインデックス。</param>
 		/// <param name="rootChanged">ルートが変化したかどうかを示す値を設定する。</param>
-		public ChangedAncestorInfo(TNode movedTarget, TNode previous, int oldIndex,bool rootChanged) {
+		public ChangedAncestorInfo(TNode movedTarget, TNode? previous, int oldIndex,bool rootChanged) {
 			this.PreviousParentOfTarget = previous;
 			this.MovedTarget = movedTarget;
 			this.OldIndex = oldIndex;
@@ -40,7 +40,7 @@ namespace Houzkin.Tree {
 		/// <param name="target">アクションの対象となったノード。</param>
 		/// <param name="previousParent">対象の移動前の親ノード。</param>
 		/// <param name="oldIndex">移動前に振り当てられていたインデックス。</param>
-		public ChangedDescendantInfo(TreeNodeChangedAction action, TNode target, TNode previousParent, int oldIndex) {
+		public ChangedDescendantInfo(TreeNodeChangedAction action, TNode target, TNode? previousParent, int oldIndex) {
 			this.NodeAction = action;
 			this.Target = target;
 			this.PreviousParentOfTarget = previousParent;
@@ -51,7 +51,7 @@ namespace Houzkin.Tree {
 		/// <summary>アクションの対象となったノードを取得する。</summary>
 		public TNode Target { get; private set; }
 		/// <summary>対象の、変更前の親ノードを取得する。</summary>
-		public TNode PreviousParentOfTarget { get; private set; }
+		public TNode? PreviousParentOfTarget { get; private set; }
 		/// <summary>対象が移動前に振り当てられていたインデックス。<para>親ノードが存在しなかった場合は -1。</para></summary>
 		public int OldIndex { get; private set; }
 	}
@@ -64,7 +64,7 @@ namespace Houzkin.Tree {
 		/// <param name="target">アクションの対象となったノード。</param>
 		/// <param name="previousParent">対象の移動前の親ノード。</param>
 		/// <param name="oldIndex">対象が移動前に振り当てられていたインデックス。</param>
-		public StructureChangedEventArgs(TreeNodeChangedAction action,TNode target,TNode previousParent,int oldIndex) {
+		public StructureChangedEventArgs(TreeNodeChangedAction action,TNode target,TNode? previousParent,int oldIndex) {
 			TreeAction = action;
 			Target = target;
 			PreviousParentOfTarget = previousParent;
@@ -75,7 +75,7 @@ namespace Houzkin.Tree {
 		/// <summary>アクションの対象となったノード。</summary>
 		public TNode Target { get; private set; }
 		/// <summary>対象ノードの変更前の親ノード。</summary>
-		public TNode PreviousParentOfTarget { get; private set; }
+		public TNode? PreviousParentOfTarget { get; private set; }
 		/// <summary>対象が移動前に振り当てられていたインデックス。<para>親ノードが存在しなかった場合は -1。</para></summary>
 		public int OldIndex { get; private set; }
 		/// <summary>祖先方向に変更があったかどうかを示す値を取得する。</summary>
@@ -87,9 +87,9 @@ namespace Houzkin.Tree {
 			get { return DescendantInfo != null; }
 		}
 		/// <summary>各ノードにおいて、子孫方向に変更があった場合、その情報を示す参照が適宜設定される。</summary>
-		public ChangedDescendantInfo<TNode> DescendantInfo { get; internal set; }
+		public ChangedDescendantInfo<TNode>? DescendantInfo { get; internal set; }
 		/// <summary>各ノードにおいて、子孫方向に変更があった場合、その情報を示す参照が適宜設定される。</summary>
-		public ChangedAncestorInfo<TNode> AncestorInfo { get; internal set; }
+		public ChangedAncestorInfo<TNode>? AncestorInfo { get; internal set; }
 	}
 	/// <summary>特定のノードから広がるツリー構造がどのように変更されたかを示す。</summary>
 	public enum TreeNodeChangedAction {

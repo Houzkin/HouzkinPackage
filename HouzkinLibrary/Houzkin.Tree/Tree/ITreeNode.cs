@@ -12,7 +12,7 @@ namespace Houzkin.Tree {
 	/// <typeparam name="TNode">各ノードの型</typeparam>
 	public interface IReadOnlyTreeNode<TNode> where TNode : IReadOnlyTreeNode<TNode> {
 		/// <summary>親ノードを取得する。</summary>
-		TNode Parent { get; }
+		TNode? Parent { get; }
 		/// <summary>子ノードを取得する。</summary>
 		IReadOnlyList<TNode> Children { get; }
 	}

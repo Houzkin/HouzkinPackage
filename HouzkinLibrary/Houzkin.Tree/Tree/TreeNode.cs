@@ -17,7 +17,7 @@ namespace Houzkin.Tree {
 		/// <summary>新規インスタンスを初期化する。</summary>
 		protected TreeNode() { }
 
-		ChildNodeCollection<TNode> 〆childNodes = null;
+		ChildNodeCollection<TNode>? 〆childNodes = null;
 		/// <summary>子ノードのコレクションを取得する。</summary>
 		protected ChildNodeCollection<TNode> ChildNodes {
 			get {
@@ -26,7 +26,7 @@ namespace Houzkin.Tree {
 				return 〆childNodes;
 			}
 		}
-		TNode 〆self;
+		TNode? 〆self;
 		internal TNode self {
 			get { 
 				if (〆self == null) 〆self = (TNode)this;
@@ -69,7 +69,7 @@ namespace Houzkin.Tree {
 		}
 		/// <summary>親ノードを取得・設定する。</summary>
 		[System.Xml.Serialization.XmlIgnore]
-		public TNode Parent {
+		public TNode? Parent {
 			get { return _parent; }
 			set {
 				if (value == null && this.Parent != null) {
@@ -83,8 +83,8 @@ namespace Houzkin.Tree {
 		IReadOnlyList<TNode> IReadOnlyTreeNode<TNode>.Children {
 			get { return this.ChildNodes; }
 		}
-		TNode _parent = null;
-		private void SetParentNode(TNode newParent) {
+		TNode? _parent = null;
+		private void SetParentNode(TNode? newParent) {
 			if (newParent != _parent) {
 				var op = _parent;
 				_parent = newParent;
@@ -150,10 +150,10 @@ namespace Houzkin.Tree {
 			get { return 〆isDisposed; }
 			private set { 〆isDisposed = value; }
 		}
-		/// <summary>インスタンスを破棄する。</summary>
+		/// <summary>インスタンスを破棄する。対象ノードに加え、子孫ノードも破棄される。</summary>
 		/// <returns>親ノード</returns>
-		public TNode Dispose() {
-			if (〆isDisposing) return self.Parent;
+		public TNode? Dispose() {
+			if (〆isDisposing) return self.Parent ;
 			〆isDisposing = true;
 			this.Dispose(true);
 			GC.SuppressFinalize(this);
@@ -166,7 +166,7 @@ namespace Houzkin.Tree {
 			if (IsDisposed) return;
 			if (disposing) {
 				this.Parent = null;
-				foreach (var cld in this.Levelorder().Skip(1).ToArray()) {
+				foreach (var cld in this.Levelorder().Skip(1).Reverse().ToArray()) {
 					cld.Dispose();
 				}
 			}
@@ -217,7 +217,7 @@ namespace Houzkin.Tree {
 			/// <typeparam name="TKey">キーの型</typeparam>
 			/// <param name="keySelector">各要素からキーを取り出す関数。</param>
 			/// <param name="comparison">各キーの比較演算子。省略でデフォルトの演算子を使用する。</param>
-			public void Sort<TKey>(Func<U, TKey> keySelector, Comparison<TKey> comparison = null) {
+			public void Sort<TKey>(Func<U, TKey> keySelector, Comparison<TKey>? comparison = null) {
 				U[] tmp;
 				if (comparison == null) tmp = this.OrderBy(keySelector).ToArray();
 				else tmp = this.OrderBy(keySelector, Comparer<TKey>.Create(comparison)).ToArray();

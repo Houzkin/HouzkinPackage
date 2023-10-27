@@ -17,12 +17,12 @@ namespace Houzkin.Tree {
 		#region Observable
 		/// <summary>対象ノードが属するツリー構造に変更があったときに発生する。</summary>
 		[field: NonSerialized]
-		public event EventHandler<StructureChangedEventArgs<TNode>> StructureChanged;
+		public event EventHandler<StructureChangedEventArgs<TNode>>? StructureChanged;
 
 		void onStructureChanged(StructureChangedEventArgs<TNode> args) {
 			if (StructureChanged != null) StructureChanged(this, args);
 		}
-		ReadOnlyObservableCollection<TNode> _observableChildren;
+		ReadOnlyObservableCollection<TNode>? _observableChildren;
 		ReadOnlyObservableCollection<TNode> IReadOnlyObservableTreeNode<TNode>.Children {
 			get {
 				if (_observableChildren == null) _observableChildren = new ReadOnlyObservableCollection<TNode>(this.ChildNodes);
@@ -71,7 +71,7 @@ namespace Houzkin.Tree {
 		}
 		/// <summary>指定したオブジェクトが現在のオブジェクトと同一かどうかを判断する。<para>このメンバーはオーバーライドできません。</para></summary>
 		/// <param name="obj">比較するオブジェクト</param>
-		public sealed override bool Equals(object obj) {
+		public sealed override bool Equals(object? obj) {
 			return base.Equals(obj);
 		}
 		/// <summary>ハッシュ関数として機能する。<para>このメンバーはオーバーライドできません。</para></summary>
@@ -92,7 +92,7 @@ namespace Houzkin.Tree {
 			}
 		}
 		[NonSerialized]
-		private EventManager _em;
+		private EventManager? _em;
 		private EventManager EveManager {
 			get {
 				if (_em == null) _em = new EventManager(self);
@@ -111,26 +111,26 @@ namespace Houzkin.Tree {
 			}
 
 			int entryCount = 0;
-			public IDisposable Entry(TNode newParent, TNode oldParent) {
+			public IDisposable Entry(TNode? newParent, TNode? oldParent) {
 				entryCount++;
 				this.NewParent = newParent;
 				this.OldParent = oldParent;
 
 				return new innerDispose(() => Exit());
 			}
-			TNode 〆newParent;
-			TNode 〆oldParent;
-			TNode NewParent {
+			TNode? 〆newParent;
+			TNode? 〆oldParent;
+			TNode? NewParent {
 				get { return 〆newParent; }
 				set { if (〆newParent == null) 〆newParent = value; }
 			}
-			TNode OldParent {
+			TNode? OldParent {
 				get { return 〆oldParent; }
 				set {
 					if (〆oldParent == null && value != null) {
 						〆oldParent = value;
-						oldIndex = OldParent.Children.IndexOf(_self);
-						preOldAnc = OldParent.Upstream().ToArray();
+						oldIndex = 〆oldParent.Children.IndexOf(_self);
+						preOldAnc = 〆oldParent.Upstream().ToArray();
 					}
 				}
 			}
@@ -194,7 +194,7 @@ namespace Houzkin.Tree {
 					if (NewParent != null) {
 						dic.Add(jArg, NewParent.Root().Levelorder());
 					} else {
-						IEnumerable<TNode> v;
+						IEnumerable<TNode>? v;
 						if (dic.TryGetValue(dArg, out v)) {
 							dic[dArg] = v.Union(_self.Levelorder());
 						} else { 
@@ -232,8 +232,8 @@ namespace Houzkin.Tree {
 			}
 		}
 		private class innerDispose : IDisposable {
-			Action _disp;
-			public innerDispose(Action dispose) { _disp = dispose; }
+			Action? _disp;
+			public innerDispose(Action? dispose) { _disp = dispose; }
 			public void Dispose() {
 				if (_disp != null) _disp(); _disp = null;
 			}

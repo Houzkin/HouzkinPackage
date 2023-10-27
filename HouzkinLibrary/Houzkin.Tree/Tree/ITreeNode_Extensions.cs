@@ -27,7 +27,8 @@ namespace Houzkin.Tree {
 		/// <returns>正常に削除できたかどうか示す値と現在のノードを返す。</returns>
 		public static ResultWithValue<T> MaybeRemoveChild<T>(this ITreeNode<T> self, T child) where T : ITreeNode<T> {
 			var cash = self.Children.Count;
-			var ncash = self.RemoveChild(child).Children.Count;
+			self.RemoveChild(child);
+			var ncash = self.Children.Count;
 			if (cash - 1 == ncash) return new ResultWithValue<T>((T)self);
 			return new ResultWithValue<T>(false, (T)self);
 		}
@@ -53,8 +54,7 @@ namespace Houzkin.Tree {
         //		cld.ClearChildren();
         //	return (T)self;
         //}
-
-
+		
         /// <summary>子孫ノードを全て分解する。</summary>
         public static IReadOnlyList<T> DismantleDescendants<T>(this ITreeNode<T> self) where T : ITreeNode<T>{
 			var lst = self.Levelorder().ToArray();

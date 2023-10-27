@@ -43,11 +43,11 @@ namespace System.ComponentModel {
 		}
 		/// <summary>プロパティ値が変更されたときに発生する。</summary>
 		[field: NonSerialized]
-		public event PropertyChangedEventHandler PropertyChanged;
+		public event PropertyChangedEventHandler? PropertyChanged;
 
 		/// <summary>コレクションが変更されたときに発生する。</summary>
 		[field:NonSerialized]
-		public event NotifyCollectionChangedEventHandler CollectionChanged;
+		public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
 		[NonSerialized]
 		ISet<string> _bn;
