@@ -26,6 +26,9 @@ namespace AppLogger {
 			var node4 = new TestNode() { Name = "D", };
 			var node5 = new TestNode() { Name = "E" };
 			var node6 = new TestNode() { Name = "F", };
+			var node7 = new TestNode() { Name = "G" };
+			var node8 = new TestNode() { Name = "H", };
+			var node9 = new TestNode() { Name = "I", };
 
 			node1.AddChild(node2);
 			node2.AddChild(node3);
@@ -33,9 +36,15 @@ namespace AppLogger {
 			node4.AddChild(node5);
 			node5.AddChild(node6);
 			Console.WriteLine("init set");
+            Console.WriteLine(string.Join("-", node1.Preorder().Select(x => x.NodeIndex().ToString())));
+			Console.WriteLine(node1.ToTreeDiagram(a => $"Name : {a.Name}, Height : {a.Height()} NodeIndex : {a.NodeIndex()}, CurrentDepth : {a.NodeIndex().CurrentDepth}" ));
+            node1.AddChild(node5);
+			node4.AddChild(node7);
+			node3.AddChild(node8);
+			node5.AddChild(node9);
             Console.WriteLine(string.Join("-", node1.Preorder().Select(x => x.Name)));
-			node1.AddChild(node5);
-            Console.WriteLine(string.Join("-", node1.Preorder().Select(x => x.Name)));
+            Console.WriteLine(node1.ToTreeDiagram(a => a.Name));
+            Console.WriteLine(node1.ToTreeDiagram(a => $"Name : {a.Name}, Height : {a.Height()}, NodeIndex : {a.NodeIndex()}, CurrentDepth : {a.NodeIndex().CurrentDepth}"));
             //Console.WriteLine(node6.Path);
             Console.WriteLine("dispose start");
 			node3.Dispose();

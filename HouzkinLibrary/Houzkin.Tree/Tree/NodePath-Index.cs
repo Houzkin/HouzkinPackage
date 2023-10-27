@@ -14,7 +14,7 @@ namespace Houzkin.Tree {
 		/// <summary>
 		/// 現在のインスタンスのRootからの深さを取得する。
 		/// </summary>
-		int CurrentDepth { get; }
+		int CurrentDepth { get; } //Level に変更した方がよい？
 	}
 	/// <summary>ノードをだとる道筋を示す。</summary>
 	/// <typeparam name="T">各ノードを示すデータ型</typeparam>

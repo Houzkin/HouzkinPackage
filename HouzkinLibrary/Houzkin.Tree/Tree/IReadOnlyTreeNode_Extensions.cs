@@ -305,6 +305,30 @@ namespace Houzkin.Tree {
 		where T : IReadOnlyTreeNode<T> {
 			return self.ToNodeMap(x => x);
 		}
-		#endregion
-	}
+		/// <summary>文字列で樹形図を生成する。</summary>
+		/// <typeparam name="T">ノードの型</typeparam>
+		/// <param name="self">対象ノード</param>
+		/// <param name="conv">ノードを表す文字列へ変換</param>
+		/// <returns>樹形図</returns>
+        public static string ToTreeDiagram<T>(this IReadOnlyTreeNode<T> self, Func<T, string> conv) where T : IReadOnlyTreeNode<T> {
+            string branch = "├ ";
+            string lastBranch = "└ ";
+            string through = "│ ";
+			string blank = "  ";
+			
+			Func<IEnumerable<T>, NodeIndex, string> createLine = (nodes, idx) => {
+				var line = string.Concat(nodes.Zip(idx).Select(pair => pair.First.IsRoot() ? "" : pair.First.HasNextSibling() ? through : blank));
+				return line;
+			};
+			var strlit = new List<string>();
+			foreach(var n in self.Preorder()) {
+				var line = createLine(n.Upstream().Reverse(), n.NodeIndex());
+				var head = n.IsRoot() ? "": n.HasNextSibling() ? branch : lastBranch;
+				line = line + head + conv(n) + Environment.NewLine;
+				strlit.Add(line);
+			}
+			return string.Concat(strlit);
+        }
+        #endregion
+    }
 }
