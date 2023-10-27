@@ -89,6 +89,7 @@ namespace Houzkin.Tree {
 			if (Disposed != null) {
 				Disposed(this, EventArgs.Empty);
 				Disposed = null;
+				StructureChanged = null;
 			}
 		}
 		[NonSerialized]
