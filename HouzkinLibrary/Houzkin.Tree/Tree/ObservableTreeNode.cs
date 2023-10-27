@@ -108,7 +108,8 @@ namespace Houzkin.Tree {
 
 			public EventManager(TNode self) {
 				_self = self;
-				initialize();
+                preOldAnc = new TNode[0];
+                initialize();
 			}
 
 			int entryCount = 0;

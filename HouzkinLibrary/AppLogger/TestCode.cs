@@ -33,9 +33,11 @@ namespace AppLogger {
 			node4.AddChild(node5);
 			node5.AddChild(node6);
 			Console.WriteLine("init set");
-            Console.WriteLine(string.Join("-", node1.Levelorder().Select(x => x.Name)));
-			//Console.WriteLine(node6.Path);
-			Console.WriteLine("dispose start");
+            Console.WriteLine(string.Join("-", node1.Preorder().Select(x => x.Name)));
+			node1.AddChild(node5);
+            Console.WriteLine(string.Join("-", node1.Preorder().Select(x => x.Name)));
+            //Console.WriteLine(node6.Path);
+            Console.WriteLine("dispose start");
 			node3.Dispose();
 			Console.WriteLine(string.Join("-",node1.Levelorder().Select(x=>x.Name)));
 
