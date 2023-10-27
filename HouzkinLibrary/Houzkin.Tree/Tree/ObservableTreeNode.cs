@@ -116,7 +116,7 @@ namespace Houzkin.Tree {
 				this.NewParent = newParent;
 				this.OldParent = oldParent;
 
-				return new Disposable(() => Exit());
+				return new innerDispose(() => Exit());
 			}
 			TNode 〆newParent;
 			TNode 〆oldParent;
@@ -231,9 +231,9 @@ namespace Houzkin.Tree {
 				}
 			}
 		}
-		private class Disposable : IDisposable {
+		private class innerDispose : IDisposable {
 			Action _disp;
-			public Disposable(Action dispose) { _disp = dispose; }
+			public innerDispose(Action dispose) { _disp = dispose; }
 			public void Dispose() {
 				if (_disp != null) _disp(); _disp = null;
 			}

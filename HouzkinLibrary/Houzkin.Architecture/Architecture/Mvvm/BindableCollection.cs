@@ -161,10 +161,10 @@ namespace Houzkin.Architecture {
 				}
 			}
 			var allItem = newSrc.Concat(_pairs);
-			IList newVm = e.NewItems == null ? null :
+			IList newVm = e.NewItems == null ? Array.Empty<object>() :
 				allItem.Where(x => e.NewItems.OfType<object>().Any(y => object.Equals(y, x.Model)))
 				.Select(x => x.ViewModel).ToArray();
-			IList oldVm = e.OldItems == null ? null :
+			IList oldVm = e.OldItems == null ? Array.Empty<object>() :
 				allItem.Where(x => e.OldItems.OfType<object>().Any(y => object.Equals(y, x.Model)))
 				.Select(x => x.ViewModel).ToArray();
 
