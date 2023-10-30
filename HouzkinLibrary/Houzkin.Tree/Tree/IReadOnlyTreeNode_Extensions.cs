@@ -277,7 +277,11 @@ namespace Houzkin.Tree {
 		}
 		/// <summary>対象ノードにおいて、その子孫ノード最深部からの距離を取得する。</summary>
 		public static int Height<T>(this  IReadOnlyTreeNode<T> self) where T : IReadOnlyTreeNode<T> {
-			return self.Levelorder().Last().NodeIndex().CurrentDepth - self.NodeIndex().CurrentDepth;
+			return self.Levelorder().Last().Depth() - self.Depth();
+		}
+		/// <summary>対象ノードにおいて、Rootからの深さを取得する。。</summary>
+		public static int Depth<T>(this IReadOnlyTreeNode<T> self) where T : IReadOnlyTreeNode<T> {
+			return self.Upstream().Count() - 1;
 		}
 		/// <summary>対象ノードが親ノードによって振り当てられているインデックスを取得する。</summary>
 		public static int BranchIndex<T>(this IReadOnlyTreeNode<T> self) where T : IReadOnlyTreeNode<T> {
