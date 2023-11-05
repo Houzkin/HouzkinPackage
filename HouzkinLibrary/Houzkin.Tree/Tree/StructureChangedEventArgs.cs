@@ -17,7 +17,7 @@ namespace Houzkin.Tree {
 		/// <summary>移動前に振り当てられていたインデックス。<para>親ノードが存在しなかった場合は -1。</para></summary>
 		public int OldIndex { get; private set; }
 		/// <summary>ルートが変更したかどうかを示す値を取得する。</summary>
-		public bool RootChanged { get; private set; }
+		public bool RootWasChanged { get; private set; }
 		/// <summary>新しいインスタンスを初期化する。</summary>
 		/// <param name="movedTarget">移動したノード</param>
 		/// <param name="previous">移動元ノード</param>
@@ -27,7 +27,7 @@ namespace Houzkin.Tree {
 			this.PreviousParentOfTarget = previous;
 			this.MovedTarget = movedTarget;
 			this.OldIndex = oldIndex;
-			this.RootChanged = rootChanged;
+			this.RootWasChanged = rootChanged;
 		}
 	}
 
@@ -79,11 +79,11 @@ namespace Houzkin.Tree {
 		/// <summary>対象が移動前に振り当てられていたインデックス。<para>親ノードが存在しなかった場合は -1。</para></summary>
 		public int OldIndex { get; private set; }
 		/// <summary>祖先方向に変更があったかどうかを示す値を取得する。</summary>
-		public bool AncestorChanged {
+		public bool AncestorWasChanged {
 			get { return AncestorInfo != null; }
 		}
 		/// <summary>子孫方向に変更があったかどうかを示す値を取得する。</summary>
-		public bool DescendantsChanged {
+		public bool DescendantWasChanged {
 			get { return DescendantInfo != null; }
 		}
 		/// <summary>各ノードにおいて、子孫方向に変更があった場合、その情報を示す参照が適宜設定される。</summary>
