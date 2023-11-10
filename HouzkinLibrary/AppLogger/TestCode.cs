@@ -1,6 +1,7 @@
 ﻿using Houzkin;
 using Houzkin.Tree;
 using Prism.Commands;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -56,27 +57,14 @@ namespace AppLogger {
 			//Console.WriteLine(string.Join("-",nodeA.Levelorder().Select(x=>x.Name)));
 			//TestExp(() => nodeA.Name);
 			//TestExp(() => nodeB.Name.Length);
-			var dcmd = new DelegateCommand(() => { },()=>true).ObservesProperty(() => nodeA.Name);//.ObservesProperty(() => nodeA.InnerNode.Name);
-			dcmd.CanExecuteChanged += (o, s) => { Console.WriteLine(dcmd.CanExecute()); };
-			//nodeA.InnerNode = new InnerObj() { Name = "Additional" };
-			nodeA.Name = "BB";
-			Console.ReadKey();
-		}
-		public static void TestExp<T>(Expression<Func<T>> expression) {
-			Console.WriteLine("初期値 : "+expression.ToString());
-			Expression exp = expression.Body;
-			while (exp is MemberExpression tmm) {
-				exp = tmm.Expression;
-				if(tmm.Member is PropertyInfo propInfo) {
-					Console.WriteLine("member : "+tmm.Member.Name);
-				}
-				if(exp is ConstantExpression consExp) {
-					Console.WriteLine(consExp.ToString() + " is constantExpression");
-					Console.WriteLine("Value = " + consExp.Value?.ToString());
-				} else {
-                    Console.WriteLine(exp?.ToString() + " is not constantExpression");
-                }
-			}
+			var root = new RootClass();
+			
+			root.NotifyObject = new NotifyObj() { Name = "test1" };
+			root.NotifyObject.Name = "test2";
+
+            root.NotifyObject = new NotifyObj() { Name = "test3" };
+            root.NotifyObject.Name = "test4";
+            Console.ReadKey();
 		}
 	}
 	public class TestNode : ObservableTreeNode<TestNode> {
@@ -104,5 +92,31 @@ namespace AppLogger {
 			}
 		}
 	}
-	
+	public class RootClass : BindableBase {
+		public RootClass() {
+			Command = new DelegateCommand(() => { })/*.ObservesProperty(() => NotifyObject)*/.ObservesProperty(() => NotifyObject.Name);
+			Command.CanExecuteChanged += (s, e) => { Console.WriteLine($"changed! {NotifyObject.Name}"); };
+			
+		}
+		NotifyObj notify = new NotifyObj();
+		public NotifyObj NotifyObject {
+			get { return notify; }
+			set {
+				SetProperty(ref notify, value);
+			}
+		}
+		DelegateCommand Command { get; set; }
+	}
+    public class NotifyObj : BindableBase {
+		public NotifyObj() { }
+		string name = "default";
+        public string Name {
+            get { return name; }
+            set {
+                this.SetProperty(ref name, value);
+            }
+        }
+    }
+    
+
 }

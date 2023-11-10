@@ -57,6 +57,7 @@ namespace Houzkin.Architecture {
 				return false;
 			}
 			storage = value;
+			this.OnPropertyChanged(propertyName);
 			return true;
 		}
 		/// <summary>値の設定と変更通知を行う</summary>

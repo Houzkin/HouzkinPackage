@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSpace", "TestSpace\TestSpace.csproj", "{8D9069E8-3250-454F-BFA4-284E2783A0CC}"
-	ProjectSection(ProjectDependencies) = postProject
-		{51E371DC-E8EB-4223-AFE1-3F823A36E134} = {51E371DC-E8EB-4223-AFE1-3F823A36E134}
-		{BBE04410-B218-4221-91DD-0680D0E8E421} = {BBE04410-B218-4221-91DD-0680D0E8E421}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Houzkin.Utility", "HouzkinUtility\Houzkin.Utility.csproj", "{BBE04410-B218-4221-91DD-0680D0E8E421}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Houzkin.Tree", "Houzkin.Tree\Houzkin.Tree.csproj", "{51E371DC-E8EB-4223-AFE1-3F823A36E134}"
@@ -17,16 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppLogger", "AppLogger\AppL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Houzkin.Architecture", "Houzkin.Architecture\Houzkin.Architecture.csproj", "{B6573B9A-4C1B-47B3-8607-3F5453F25BC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismSample", "PrismSample\PrismSample.csproj", "{24A38A9B-718B-4473-B5BE-5ED46E541306}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8D9069E8-3250-454F-BFA4-284E2783A0CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D9069E8-3250-454F-BFA4-284E2783A0CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D9069E8-3250-454F-BFA4-284E2783A0CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8D9069E8-3250-454F-BFA4-284E2783A0CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BBE04410-B218-4221-91DD-0680D0E8E421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BBE04410-B218-4221-91DD-0680D0E8E421}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBE04410-B218-4221-91DD-0680D0E8E421}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -43,6 +35,10 @@ Global
 		{B6573B9A-4C1B-47B3-8607-3F5453F25BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6573B9A-4C1B-47B3-8607-3F5453F25BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6573B9A-4C1B-47B3-8607-3F5453F25BC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24A38A9B-718B-4473-B5BE-5ED46E541306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24A38A9B-718B-4473-B5BE-5ED46E541306}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24A38A9B-718B-4473-B5BE-5ED46E541306}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24A38A9B-718B-4473-B5BE-5ED46E541306}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
