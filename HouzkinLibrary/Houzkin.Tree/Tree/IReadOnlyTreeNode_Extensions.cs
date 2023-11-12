@@ -146,7 +146,7 @@ namespace Houzkin.Tree {
 		/// <summary>兄弟ノードの最初のノードへ移動する。見つからなかった場合は現在のノードを返す。</summary>
 		/// <param name="self">現在のノード</param>
 		/// <param name="predicate">条件を指定した場合、条件を満たす最初のノードを取得する。</param>
-		public static ResultWithValue<T> MaybeFirstSibling<T>(this IReadOnlyTreeNode<T> self, Predicate<T> predicate = null) where T : IReadOnlyTreeNode<T> {
+		public static ResultWithValue<T> FirstSiblingOrSelf<T>(this IReadOnlyTreeNode<T> self, Predicate<T> predicate = null) where T : IReadOnlyTreeNode<T> {
 			Predicate<T> pred = predicate ?? new Predicate<T>(_ => true);
 			var fst = self.Siblings().FirstOrDefault(x => pred(x));
 			if (fst != null) return new ResultWithValue<T>(fst);
@@ -162,7 +162,7 @@ namespace Houzkin.Tree {
 		/// <summary>兄弟ノードの最後へ移動する。見つからなかった場合は現在のノードを返す。</summary>
 		/// <param name="self">現在のノード</param>
 		/// <param name="predicate">条件を指定した場合、条件を満たす最後のノードを取得する。</param>
-		public static ResultWithValue<T> MaybeLastSibling<T>(this IReadOnlyTreeNode<T> self, Predicate<T> predicate = null) where T : IReadOnlyTreeNode<T> {
+		public static ResultWithValue<T> LastSiblingOrSelf<T>(this IReadOnlyTreeNode<T> self, Predicate<T> predicate = null) where T : IReadOnlyTreeNode<T> {
 			Predicate<T> pred = predicate ?? new Predicate<T>(_ => true);
 			var lst = self.Siblings().LastOrDefault(x => pred(x));
 			if (lst != null) return new ResultWithValue<T>(lst);
@@ -178,7 +178,7 @@ namespace Houzkin.Tree {
 		/// <summary>次の兄弟ノードへ移動する。見つからなかった場合は現在のノードを返す。</summary>
 		/// <param name="self">現在のノード</param>
 		/// <param name="predicate">条件を指定した場合、条件を満たす次のノードを取得する。</param>
-		public static ResultWithValue<T> MaybeNextSibling<T>(this IReadOnlyTreeNode<T> self, Predicate<T> predicate = null) where T : IReadOnlyTreeNode<T> {
+		public static ResultWithValue<T> NextSiblingOrSelf<T>(this IReadOnlyTreeNode<T> self, Predicate<T> predicate = null) where T : IReadOnlyTreeNode<T> {
 			Predicate<T> pred = predicate ?? new Predicate<T>(_ => true);
 			var nxt = self.nextSiblings().FirstOrDefault(x => pred(x));
 			if (nxt != null) return new ResultWithValue<T>(nxt);
@@ -194,7 +194,7 @@ namespace Houzkin.Tree {
 		/// <summary>前の兄弟ノードへ移動する。見つからなかった場合は現在のノードを返す。</summary>
 		/// <param name="self">現在のノード</param>
 		/// <param name="predicate">条件を指定した場合、条件を満たす前のノードを取得する。</param>
-		public static ResultWithValue<T> MaybePreviousSibling<T>(this IReadOnlyTreeNode<T> self, Predicate<T> predicate = null) where T : IReadOnlyTreeNode<T> {
+		public static ResultWithValue<T> PreviousSiblingOrSelf<T>(this IReadOnlyTreeNode<T> self, Predicate<T> predicate = null) where T : IReadOnlyTreeNode<T> {
 			Predicate<T> pred = predicate ?? new Predicate<T>(_ => true);
 			var prv = self.previousSiblings().LastOrDefault(x => pred(x));
 			if (prv != null) return new ResultWithValue<T>(prv);

@@ -14,7 +14,7 @@ namespace Houzkin.Tree {
 		/// <summary>
 		/// 現在のインスタンスのRootからの深さを取得する。
 		/// </summary>
-		int CurrentDepth { get; } //Level に変更した方がよい？
+		int Depth { get; } //Level に変更した方がよい？
 	}
 	/// <summary>ノードをだとる道筋を示す。</summary>
 	/// <typeparam name="T">各ノードを示すデータ型</typeparam>
@@ -38,7 +38,7 @@ namespace Houzkin.Tree {
 			get { return this._path[level]; }
 		}
 		/// <summary>現在のインスタンスのRootからの深さを取得する。</summary>
-		public int CurrentDepth {
+		public int Depth {
 			get {
 				if (this._path.Any()) return this._path.Count() - 1;
 				else return 0; }
@@ -46,11 +46,11 @@ namespace Houzkin.Tree {
 		/// <summary>文字列として表す。</summary>
 		/// <param name="sepalater">各ノードのパスの区切りを指定する。</param>
 		public string ToString(string sepalater) {
-			var s = _path.FirstOrDefault().ToString();
+			var s = _path.FirstOrDefault()?.ToString() ?? "";
 			sepalater = sepalater ?? "";
 			foreach (var str in _path.Skip(1)) {
 				s += sepalater;
-				s += str.ToString();
+				s += str?.ToString() ?? "";
 			}
 			return s;
 		}
@@ -101,7 +101,7 @@ namespace Houzkin.Tree {
 			}
 		}
 		/// <summary>このパスコードが示すノードのRootからの深さを取得する。</summary>
-		public int CurrentDepth {
+		public int Depth {
 			get {
 				if (_nodePath == null) return 0;
 				return _nodePath.Count; }
@@ -117,7 +117,7 @@ namespace Houzkin.Tree {
 			return str;
 		}
 		/// <summary>現在のオブジェクトと等しいかどうかを判断する。</summary>
-		public override bool Equals(object obj) {
+		public override bool Equals(object? obj) {
 			if (obj is NodeIndex) {
 				var ob = (NodeIndex)obj;
 				if (this.SequenceEqual(ob)) return true;
@@ -144,7 +144,7 @@ namespace Houzkin.Tree {
 			var cpn = new Comparison<NodeIndex>((x, y) => {
 				var lv = x.ToArray().Zip(y.ToArray(), (xi, yi) => xi - yi).FirstOrDefault(s => s != 0);
 				if (lv != 0) return lv;
-				return x.CurrentDepth - y.CurrentDepth;
+				return x.Depth - y.Depth;
 			});
 			return Comparer<NodeIndex>.Create(cpn);
 		}
@@ -155,7 +155,7 @@ namespace Houzkin.Tree {
 			var cpn = new Comparison<NodeIndex>((x, y) => {
 				var lv = x.ToArray().Zip(y.ToArray(), (xi, yi) => xi - yi).FirstOrDefault(s => s != 0);
 				if (lv != 0) return lv;
-				return y.CurrentDepth - x.CurrentDepth;
+				return y.Depth - x.Depth;
 			});
 			return Comparer<NodeIndex>.Create(cpn);
 		}
@@ -164,7 +164,7 @@ namespace Houzkin.Tree {
 		/// </summary>
 		public static IComparer<NodeIndex> GetLevelorderComparer() {
 			var cpn = new Comparison<NodeIndex>((x, y) => {
-				var lv = x.CurrentDepth - y.CurrentDepth;
+				var lv = x.Depth - y.Depth;
 				if (lv != 0) return lv;
 				return x.ToArray().Zip(y.ToArray(), (xl, yl) => xl - yl)
 					.FirstOrDefault(s => s != 0);

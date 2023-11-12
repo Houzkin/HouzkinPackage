@@ -44,7 +44,7 @@ namespace Houzkin.Architecture {
 		#region		INotifyPropertyChanged の実装
 
 		/// <summary>プロパティ値が変更されたときに発生する。</summary>
-		public event PropertyChangedEventHandler PropertyChanged;
+		public event PropertyChangedEventHandler? PropertyChanged;
 		/// <summary>プロパティ変更通知を発行する。</summary>
 		protected void OnPropertyChanged([CallerMemberName] string name = null)
 		{
@@ -68,7 +68,7 @@ namespace Houzkin.Architecture {
 		/// <typeparam name="TProp">プロパティの型</typeparam>
 		/// <param name="property">変更したプロパティを表す式</param>
 		protected void OnPropertyChanged<TProp>(Expression<Func<TProp>> property) {
-			MemberExpression memExp;
+			MemberExpression? memExp;
 			memExp = property.Body as MemberExpression;
 			if (memExp == null) throw new ArgumentException("プロパティ名を特定できません");
 

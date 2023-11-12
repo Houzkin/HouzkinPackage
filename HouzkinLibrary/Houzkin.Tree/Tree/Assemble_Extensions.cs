@@ -51,7 +51,7 @@ namespace Houzkin.Tree {
 			var vst = new ElementScroller<Tuple<NodeIndex, T>>(seq);
 			foreach (var tr in vst.GetSequence()) {
 				vst.MoveTo(tr)
-					.MaybeNext(x => tr.Item1.CurrentDepth > x.Item1.CurrentDepth)
+					.MaybeNext(x => tr.Item1.Depth > x.Item1.Depth)
 					.TrueOrNot(r => addAction(r.Current.Item2, tr.Item2));
 			}
 			return vst.Current.Item2;

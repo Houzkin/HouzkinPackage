@@ -32,13 +32,20 @@ namespace Houzkin.Architecture {
 		protected virtual IEnumerable<TModel> DesignateChildCollection(IEnumerable<TModel> modelChildNodes) {
 			return modelChildNodes;
 		}
+		/// <summary>
+		/// 削除された子ノードを処理する。デフォルトではDisopose処理をする。
+		/// </summary>
+		/// <param name="removedChildren">削除された子ノードのコレクション</param>
+		protected virtual void ManageRemovedChildren(IEnumerable<TViewModel> removedChildren) {
+			foreach (var child in removedChildren) child.Dispose();
+		}
 		private ReadOnlyBindableCollection<TViewModel> _GenerateChildCollection(IEnumerable<TModel> source) {
 			Func<TModel, TViewModel> conv = m => {
 				var c = GenerateChild(m);
 				c._parent = this as TViewModel;
 				return c;
 			};
-			return ReadOnlyBindableCollection.Create(DesignateChildCollection(source), conv);
+			return ReadOnlyBindableCollection.Create(DesignateChildCollection(source), conv,ManageRemovedChildren);
 		}
 		TViewModel _parent;
 		/// <summary>親ノードを取得する。</summary>

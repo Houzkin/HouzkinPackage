@@ -17,7 +17,7 @@ namespace Houzkin.Tree {
 
 		/// <summary>子ノードを追加する。</summary>
 		/// <returns>正常に追加できたかどうか示す値と現在のノードを返す。</returns>
-		public static ResultWithValue<T> MaybeAddChild<T>(this ITreeNode<T> self, T child) where T : ITreeNode<T> {
+		public static ResultWithValue<T> TryAddChild<T>(this ITreeNode<T> self, T child) where T : ITreeNode<T> {
 			var cash = self.Children.Count;
 			var ncash = self.AddChild(child).Children.ToArray();
 			if (cash + 1 == ncash.Length && ncash.Contains(child)) return new ResultWithValue<T>((T)self);
@@ -25,7 +25,7 @@ namespace Houzkin.Tree {
 		}
 		/// <summary>子ノードを削除する。</summary>
 		/// <returns>正常に削除できたかどうか示す値と現在のノードを返す。</returns>
-		public static ResultWithValue<T> MaybeRemoveChild<T>(this ITreeNode<T> self, T child) where T : ITreeNode<T> {
+		public static ResultWithValue<T> TryRemoveChild<T>(this ITreeNode<T> self, T child) where T : ITreeNode<T> {
 			var cash = self.Children.Count;
 			self.RemoveChild(child);
 			var ncash = self.Children.Count;
@@ -95,7 +95,7 @@ namespace Houzkin.Tree {
 		/// <param name="self">対象ノード</param>
 		/// <param name="sibling">追加する兄弟ノード</param>
 		/// <returns>正常に追加できたかどうか示す値と現在のノードを返す。</returns>
-		public static ResultWithValue<T> MaybeInsertNextSibling<T>(this ITreeNode<T> self,ITreeNode<T> sibling)
+		public static ResultWithValue<T> TryInsertNextSibling<T>(this ITreeNode<T> self,ITreeNode<T> sibling)
 		where T : ITreeNode<T> {
 			if (self.Parent != null) {
 				var cash = self.Children.Count;
@@ -108,7 +108,7 @@ namespace Houzkin.Tree {
 		/// <param name="self">対象ノード</param>
 		/// <param name="sibling">追加する兄弟ノード</param>
 		/// <returns>正常に追加できたかどうか示す値と現在のノードを返す。</returns>
-		public static ResultWithValue<T> MaybeInsertPreviousSibling<T>(this ITreeNode<T> self,ITreeNode<T> sibling)
+		public static ResultWithValue<T> TryInsertPreviousSibling<T>(this ITreeNode<T> self,ITreeNode<T> sibling)
 		where T : ITreeNode<T> {
 			if (self.Parent != null) {
 				var cash = self.Children.Count;
@@ -119,7 +119,7 @@ namespace Houzkin.Tree {
 		}
 		/// <summary>現在のノードを削除する。</summary>
 		/// <returns>正常に削除できた場合は親だったノードを、できなかった場合は現在のノードを付与した結果を返す。</returns>
-		public static ResultWithValue<T> MaybeRemoveOwn<T>(this ITreeNode<T> self) where T : ITreeNode<T> {
+		public static ResultWithValue<T> TryRemoveOwn<T>(this ITreeNode<T> self) where T : ITreeNode<T> {
 			if (self.Parent != null) {
 				var parent = self.Parent;
 				self.Parent.RemoveChild((T)self);

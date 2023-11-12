@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,26 +28,27 @@ namespace Houzkin.Architecture {
 			}
 		}
 		/// <summary>コレクションが変更されたときに発生する。</summary>
-		public event NotifyCollectionChangedEventHandler CollectionChanged {
+		public event NotifyCollectionChangedEventHandler? CollectionChanged {
 			add { this.ChangedEventManager.CollectionChanged += value; }
 			remove { this.ChangedEventManager.CollectionChanged -= value; }
 		}
 		/// <summary>プロパティが変更されたときに発生する。</summary>
-		public event PropertyChangedEventHandler PropertyChanged {
+		public event PropertyChangedEventHandler? PropertyChanged {
 			add { ChangedEventManager.PropertyChanged += value; }
 			remove { ChangedEventManager.PropertyChanged -= value; }
 		}
-		/// <summary>観測可能なコレクションを素に、連動するビューモデルのコレクションを生成する。</summary>
-		/// <typeparam name="TModel">モデルとする要素の型</typeparam>
-		/// <typeparam name="TViewModel">モデルをもとに、初期化されるビューモデル</typeparam>
-		/// <param name="source">INotifyCollectionChanged インターフェイスを実装したコレクション</param>
-		/// <param name="converter">モデルからビューモデルを生成する関数</param>
-		public static ReadOnlyBindableCollection<TViewModel> Create<TModel, TViewModel>(IEnumerable<TModel> source, Func<TModel, TViewModel> converter) {
+        /// <summary>観測可能なコレクションを素に、連動するビューモデルのコレクションを生成する。</summary>
+        /// <typeparam name="TModel">モデルとする要素の型</typeparam>
+        /// <typeparam name="TViewModel">モデルをもとに、初期化されるビューモデル</typeparam>
+        /// <param name="source">INotifyCollectionChanged インターフェイスを実装したコレクション</param>
+        /// <param name="converter">モデルからビューモデルを生成する関数</param>
+        /// <param name="removedAction">削除されたビューモデルの処理。null指定で、IDisposableであればDisposeします</param>
+        public static ReadOnlyBindableCollection<TViewModel> Create<TModel, TViewModel>(IEnumerable<TModel> source, Func<TModel, TViewModel> converter, Action<IEnumerable<TViewModel>>? removedAction = null) {
 			Func<object, MVMPair<TModel, TViewModel>> generator = x => {
 				var m = (TModel)x;
 				return new MVMPair<TModel, TViewModel>(m, converter(m));
 			};
-			return new ReadOnlyBindableCollection<TViewModel>(source, generator);
+			return new ReadOnlyBindableCollection<TViewModel>(source, generator,removedAction);
 		}
 		/// <summary>空のビューモデルコレクションを生成する。</summary>
 		/// <typeparam name="TModel">モデルとする要素の型</typeparam>
@@ -105,10 +107,10 @@ namespace Houzkin.Architecture {
 		readonly Func<object, MVMPair> _converter;
 		IDisposable _collectionListener;
 		IDisposable _propListener;
+		Action<IEnumerable<TViewModel>> _removeAction;
 
-		private ReadOnlyBindableCollection(IEnumerable source, IList<MVMPair> pairs, Func<object, MVMPair> converter)
+		private ReadOnlyBindableCollection(IEnumerable source, IList<MVMPair> pairs, Func<object, MVMPair> converter, Action<IEnumerable<TViewModel>>? removedAction = null)
 			: base(source) {
-
 			var s = source as INotifyCollectionChanged;
 			if (s == null) throw new ArgumentException("INotifyCollectionChanged インターフェイスを実装していません。");
 			//_collectionListener = WeakEvent<NotifyCollectionChangedEventArgs>.CreateListener(
@@ -129,12 +131,16 @@ namespace Houzkin.Architecture {
 			}
 			this._pairs = pairs;
 			this._converter = converter;
+			_removeAction = removedAction ?? new Action<IEnumerable<TViewModel>>(removes => {
+				foreach (var r in removes.OfType<IDisposable>()) r.Dispose();
+			});
 		}
 		/// <summary>新規インスタンスを初期化する。</summary>
 		/// <param name="source">INotifyCollectionChanged インターフェイスを実装したコレクション</param>
 		/// <param name="converter">モデルからビューモデルを生成する関数</param>
-		internal ReadOnlyBindableCollection(IEnumerable source, Func<object, MVMPair> converter)
-			: this(source, source.OfType<object>().Select(x => converter(x)).ToList<MVMPair>(), converter) {
+		/// <param name="removedAction">削除されたビューモデルの処理</param>
+		internal ReadOnlyBindableCollection(IEnumerable source, Func<object, MVMPair> converter, Action<IEnumerable<TViewModel>>? removedAction = null)
+			: this(source, source.OfType<object>().Select(x => converter(x)).ToList<MVMPair>(), converter, removedAction) {
 		}
 		/// <summary>観測可能なコレクションを素に連動するビューモデルのコレクションを初期化する。</summary>
 		/// <param name="source">INotifyCollectionChanged を実装したコレクション</param>
@@ -147,7 +153,7 @@ namespace Houzkin.Architecture {
 		internal ReadOnlyBindableCollection(IEnumerable source) : base(source){
 			_pairs = new List<MVMPair>();
 		}
-		void CollectionChangedAction(object sender, NotifyCollectionChangedEventArgs e) {
+		void CollectionChangedAction(object? sender, NotifyCollectionChangedEventArgs e) {
 			ThrowExceptionIfDisposed();
 			//新規リストに並べ替えられた要素を格納
 			IList<MVMPair> newSrc = new List<MVMPair>();
@@ -193,8 +199,9 @@ namespace Houzkin.Architecture {
 			}
 			base.ChangedEventManager.OnCollectionChanged(arg);
 
-			var ds = trash.Select(x => x.ViewModel).OfType<IDisposable>();
-			foreach (var d in ds) d.Dispose();
+			_removeAction?.Invoke(trash.Select(x=>x.ViewModel).OfType<TViewModel>());
+			//var ds = trash.Select(x => x.ViewModel).OfType<IDisposable>();
+			//foreach (var d in ds) d.Dispose();
 		}
 		/// <summary>コレクションのカウントを返す。</summary>
 		public int Count {
